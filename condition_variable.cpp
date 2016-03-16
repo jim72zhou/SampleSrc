@@ -1,6 +1,9 @@
 // condition_variable.cpp
+
 // original sample is from:http://www.cnblogs.com/zhuyp1015/archive/2012/04/08/2438291.html
-//
+
+// some info about C++11 multi thread:
+// https://github.com/forhappy/Cplusplus-Concurrency-In-Practice/blob/master/zh/chapter1-Introduction/web-resources.md
 
 #include "stdafx.h"
 
