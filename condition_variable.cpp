@@ -1,4 +1,5 @@
-// condition_variable.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
+// condition_variable.cpp
+// original sample is from:http://www.cnblogs.com/zhuyp1015/archive/2012/04/08/2438291.html
 //
 
 #include "stdafx.h"
