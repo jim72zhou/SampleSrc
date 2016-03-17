@@ -68,7 +68,7 @@ public:
 	TEST_METHOD(TestInitialData)
     {
         CDemoBusiness demo;
-		//demo.SetData(1);
+	//demo.SetData(1);	//for verification
         Assert::AreEqual(demo.data, 1);
         //make sure that they are equal if not the test fails
     }
@@ -116,7 +116,7 @@ public:
     TEST_METHOD(AreSameTest)
     {
         int x = 100;
-		int x1 = 101;
+	int x1 = 101;	//for verification
         int& y = x1;
         Assert::AreSame(x, y);
     }
