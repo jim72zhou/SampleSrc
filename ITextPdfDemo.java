@@ -8,6 +8,8 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
+//more sample can be found from http://developers.itextpdf.com/examples/tables-itext5/101-very-simple-table
+
 public class ITextPdfDemo {
 
       public static void main(String[] args) throws Exception {
@@ -46,3 +48,5 @@ public class ITextPdfDemo {
         document.close();
       }
     }
+
+
