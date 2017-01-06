@@ -68,7 +68,7 @@ void mergeSort(T* pData, int length)
 template<typename T>
 void _mergeSort2(T* pData, int left, int right)
 {
-    // for size size data, use insertion sort is better
+	// for small size data, use insertion sort is better
 	// which value is the best, it decides by the data, it need be tuned 
 	// http://stackoverflow.com/questions/12622015/why-should-insertion-sort-be-used-after-threshold-crossover-in-merge-sort
 	// http://blog.csdn.net/wu_yihao/article/details/8038998    
