@@ -8,6 +8,8 @@
 // Note
 // quickSort would be faster than quickSort1, but from the test, it's not so. 
 // the reason is quickSort cost so much on swap data, but quickSort1 has no such extra swap.
+// if reduce swap by below method(*1), the speed will improve greatly and 
+// would quicker than quickSort1 when there are almost repeated elements
 
 // some topics about 3 ways quick sort
 // http://stackoverflow.com/questions/941447/quicksort-with-3-way-partition
@@ -47,20 +49,23 @@ void _quickSort(T pData[], int left, int right)
 			break;
 
 		// Swap, so that smaller goes on left greater goes on right
-		swap(pData[i], pData[j]);
+		if(pData[i] < pData[j])				// *1 reduce data swap
+			swap(pData[i], pData[j]);
 
 		// Move all same left occurrence of pivot to beginning of array and keep count using lt
 		if(pData[i] == v)
 		{
 			++le;
-			swap(pData[le], pData[i]);
+			//swap(pData[le], pData[i]);	// *1 reduce data swap
+			pData[i] = pData[le];
 		}
 
 		// Move all same right occurrence of pivot to end of array and keep count using gt
 		if(pData[j] == v)
 		{
 			--re;
-			swap(pData[re], pData[j]);
+			//swap(pData[re], pData[j]);	// *1 reduce data swap
+			pData[j] = pData[re];
 		}
 	}
 
@@ -69,11 +74,13 @@ void _quickSort(T pData[], int left, int right)
 	// Move all left same occurrences from beginning to adjacent to data[j]
 	j = i -1;
 	for(int k = left + 1; k <= le; ++k, --j)
-		swap(pData[k], pData[j]);
+		//swap(pData[k], pData[j]);			// *1 reduce data swap
+		pData[k] = v;
 
 	 // Move all right same occurrences from end to adjacent to data[i]
 	for(int k = right; k >= re; --k, ++i)
-		swap(pData[k], pData[i]);
+		//swap(pData[k], pData[i]);			// *1 reduce data swap
+		pData[k] = v;
 
     _quickSort(pData, left, j);
     _quickSort(pData, i, right);
