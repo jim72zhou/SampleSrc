@@ -11,17 +11,23 @@
 #include "Sort\SortUseCase.h"
 
 #include "Heap\MaxHeap.h"
+#include "Heap\MinHeap.h"
+#include "Heap\IndexMaxHeap.h"
 #include "Heap\HeapSort.h"
+
+#include "Tree\BST.h"
+#include "Tree\SequenceST.h"
 
 #include "Book.h"
 #include "SortTestUtil.h"
+#include "FileProcs.h"
 
 using namespace std;
 
 void sortTest()
 {
 	const int NUM = 100000;
-	const int MAX = 100000;
+	const int MAX = 10;
 
 	typedef struct
 	{
@@ -33,20 +39,23 @@ void sortTest()
 	
 	//auto pfQuickSort = [](int *pData, int n){quickSort(pData, 0, n);};
 	TestData sortArray[] = {
-		//{"Selection Sort",	selectionSort,	NULL, NUM},
-		//{"Bubble Sort",		bubbleSort,		NULL, NUM},
-		//{"Shell Sort",		shellSort,		NULL, NUM},
-		//{"Insertion Sort",	insertionSort,	NULL, NUM},		
-		//{"Merge SortV0",		mergeSortV0,	NULL, NUM},
-		{"Merge Sort",			mergeSort,		NULL, NUM},
-		{"Merge SortBU",		mergeSortBU,	NULL, NUM},
-		//{"Quick SortV0",		quickSortV0,	NULL, NUM},
-		{"Quick SortV1",		quickSortV1,	NULL, NUM},
-		{"Quick Sort",			quickSort,		NULL, NUM},
-		{"Heap Sort1",			heapSort1,		NULL, NUM},
-		{"Heap Sort2",			heapSort2,		NULL, NUM},
-		{"Heap Sort3",			heapSort3,		NULL, NUM},
-		{"Heap Sort4",			heapSort4,		NULL, NUM},
+		//{"Selection Sort",	selectionSort,		nullptr, NUM},
+		//{"Bubble Sort",		bubbleSort,			nullptr, NUM},
+		//{"Shell Sort",		shellSort,			nullptr, NUM},
+		//{"Insertion Sort",	insertionSort,		nullptr, NUM},		
+		//{"Merge SortV0",		mergeSortV0,		nullptr, NUM},
+		{"Merge Sort",			mergeSort,			nullptr, NUM},
+		{"Merge SortBU",		mergeSortBU,		nullptr, NUM},
+		//{"Quick SortV0",		quickSortV0,		nullptr, NUM},
+		{"Quick SortV1",		quickSortV1,		nullptr, NUM},
+		{"Quick Sort",			quickSort,			nullptr, NUM},
+		{"MaxHeap Sort1",		maxHeapSort1,		nullptr, NUM},
+		{"MaxHeap Sort2",		maxHeapSort2,		nullptr, NUM},
+		//{"MaxHeap Sort3",		maxHeapSort3,		nullptr, NUM},
+		//{"MaxHeap Sort4",		maxHeapSort4,		nullptr, NUM},
+		//{"IndexMaxHeap Sort",	indexMaxHeapSort,	nullptr, NUM},
+		{"MinHeap Sort1",		minHeapSort1,		nullptr, NUM},
+		{"MinHeap Sort2",		minHeapSort2,		nullptr, NUM},
 		
 	};
 
@@ -106,35 +115,128 @@ void sortTest()
 	*/
 }
 
+void treeTest()
+{
+    string filename = "D:\\Temp\\CppDemo\\GeeksAlgorithm\\Debug\\bible.txt";
+    vector<string> words;
+    if(FileProcs::readFile(filename, words))
+	{
+        cout << "There are totally " << words.size() << " words in " << filename << endl;
+
+        cout << endl;
+
+        // test BST
+        time_t startTime = clock();
+        BST<string, int> bst = BST<string, int>();
+        for (vector<string>::iterator iter = words.begin(); iter != words.end(); iter++)
+		{
+            int *res = bst.search(*iter);
+            if (res == nullptr)
+                bst.insert(*iter, 1);
+            else
+                (*res)++;
+        }
+
+        cout << "'god' : " << *bst.search("god") << endl;
+        time_t endTime = clock();
+        cout << "BST , time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
+
+        cout << endl;
+
+
+        // test SequenceST
+        startTime = clock();
+        SequenceST<string, int> sst = SequenceST<string, int>();
+        for(vector<string>::iterator iter = words.begin(); iter != words.end(); iter++) 
+		{
+            int *res = sst.search(*iter);
+            if (res == nullptr)
+                sst.insert(*iter, 1);
+            else
+                (*res)++;
+        }
+
+        cout << "'god' : " << *sst.search("god") << endl;
+
+        endTime = clock();
+        cout << "SequenceST , time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
+
+    }
+}
+
+void bstTraverseTest()
+{
+	srand(time(NULL));
+
+	BST<int,int> bst = BST<int,int>();
+
+    int n = 10;
+	cout << "BST Travse Test" << endl;
+	cout << "Test data:" << endl;
+    for(int i = 0 ; i < n ; ++i)
+	{
+        int key = rand()%n;
+        int value = key;
+        cout << key << " ";
+        bst.insert(key, value);
+    }
+    cout << endl;
+
+    // test size
+    cout << "size: " << bst.size() << endl << endl;
+
+    // test preOrder
+    cout << "preOrder: " << endl;
+    bst.preOrder();
+    cout << endl << endl;
+
+    // test inOrder
+    cout << "inOrder: " << endl;
+    bst.inOrder();
+    cout << endl << endl;
+
+    // test postOrder
+    cout << "postOrder: " << endl;
+    bst.postOrder();
+    cout << endl << endl;
+}
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 
 ////////////////////////////////////////
 // placehold to verify for special test
 #if 0
-    MaxHeap<int> maxheap = MaxHeap<int>(100);
+    //IndexMaxHeap<int> indexMaxheap = IndexMaxHeap<int>(100);
 
-    srand(unsigned int(time(NULL)));
-    for( int i = 0 ; i < 63 ; i ++ ){
-        maxheap.insert(rand()%100);
+    srand(unsigned int(time(nullptr)));
+	cout << "Prepate the data" << endl;
+	int data[100];
+    for(int i = 0 ; i < 100 ; ++i)
+	{
+		int e = rand()%100;
+		//cout << "(" << i + 1 << "," << e << ") ";
+		data[i] = e;
     }
+	cout << endl;
 
-	maxheap.printData();
+	BST<int, int> bst = BST<int, int>();
+	bst.insert(10, 10);
+	bst.insert(9, 9);
+	bst.insert(12, 12);
+	bst.printData();
 
-	cout << "Sorted data" << endl;
-    while(!maxheap.isEmpty())
-        cout << maxheap.popMax() << " ";
-    cout << endl;
+	cout << endl;
 
 #endif
 
-	int arr[] = {1, 20, 6, 4, 5, 5, 6, 7};
-	cout << "Count of inversions are " << countInversions(arr, 5) << endl;
-	cout << "Nth(2) in arr is " << findNth(arr, 3, 8) << endl;
-
 ////////////////////////////////////////
 
-	sortTest();
+	bstTraverseTest();
+
+	//treeTest();
+
+	//sortTest();
 
 	//system("pause");
 	return 0;
