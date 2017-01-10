@@ -46,7 +46,8 @@ public:
 		}
 	}
 
-	IndexMaxHeap(Item arr[], int n){
+	IndexMaxHeap(Item arr[], int n)
+	{
         m_pData = new Item[n + 1];
 		m_pIndex = new int[n + 1];
 		m_pReverse = new int[n + 1];
@@ -211,8 +212,8 @@ private:
 
 // functions to test the heap
 public:
-    void printData(){        
-
+    void printData()
+	{
         cout<<"The Heap size is: " << size() << endl;
         cout<<"Data in heap: ";
 		int level = 0;

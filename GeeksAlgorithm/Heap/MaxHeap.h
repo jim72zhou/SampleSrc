@@ -22,7 +22,8 @@ public:
 		m_count = 0;
 	}
 
-	MaxHeap(Item arr[], int n){
+	MaxHeap(Item arr[], int n)
+	{
         m_pData = new Item[n + 1];
         m_capacity = n;
 
@@ -119,8 +120,8 @@ private:
 
 // functions to test the heap
 public:
-    void printData(){        
-
+    void printData()
+	{
         cout<<"The Heap size is: " << size() << endl;
         cout<<"Data in heap: ";
 		int level = 0;
