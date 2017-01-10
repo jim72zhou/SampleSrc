@@ -75,7 +75,7 @@ void _mergeSort(T* pData, int left, int right)
         return;
     }
 
-    int middle = (left + right ) / 2;
+	int middle = left + (right - left) / 2;
     _mergeSort(pData, left, middle);
     _mergeSort(pData, middle + 1, right);
     
@@ -97,7 +97,7 @@ void _mergeSortV0(T* pData, int left, int right)
 {
 	if(left < right)
 	{
-		int middle = (left + right) / 2;
+		int middle = left + (right - left) / 2;
 		_mergeSortV0(pData, left, middle);
 		_mergeSortV0(pData, middle + 1, right);
 		_merge(pData, left, middle, right);

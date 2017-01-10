@@ -121,7 +121,8 @@ int __mergeSort(int arr[], int temp[], int l, int r)
 
 	if(l < r)
 	{
-		mid = (l + r) / 2;
+		// mid = l + (r - l) / 2;    // it would resunt in overflow issue
+		mid = l + (r - l) / 2;
 		inv_cnt = __mergeSort(arr, temp, l, mid);
 		inv_cnt += __mergeSort(arr, temp, mid + 1, r);
 
