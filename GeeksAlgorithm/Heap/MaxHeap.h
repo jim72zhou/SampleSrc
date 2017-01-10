@@ -27,7 +27,7 @@ public:
         m_capacity = n;
 
         for(int i = 0 ; i < n ; ++i)
-            m_pData[i+1] = arr[i];
+            m_pData[i + 1] = arr[i];
         m_count = n;
 
 		// Starting from the lowest level and moving upwards, shift the root of each subtree 

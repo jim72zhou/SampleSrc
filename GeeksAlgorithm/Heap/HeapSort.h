@@ -3,6 +3,7 @@
 #define GEEKS_HEAP_SORT_H
 
 #include "MaxHeap.h"
+#include "IndexMaxHeap.h"
 
 using namespace std;
 
@@ -14,7 +15,7 @@ void heapSort1(T arr[], int n)
     for(int i = 0; i < n; ++i)
         maxheap.insert(arr[i]);
 
-    for(int i = n - 1; i >= 0; --i )
+    for(int i = n - 1; i >= 0; --i)
         arr[i] = maxheap.popMax();
 }
 
@@ -90,6 +91,15 @@ void heapSort4(T arr[], int n)
         swap(arr[0] , arr[i]);
         __shiftDown(arr, i, 0);
     }
+}
+
+template<typename T>
+void indexMaxHeapSort(T arr[], int n)
+{
+
+    IndexMaxHeap<T> indexMaxheap = IndexMaxHeap<T>(arr, n);
+    for(int i = n - 1 ; i >= 0; --i)
+        arr[i] = indexMaxheap.popMax();
 }
 
 #endif //GEEKS_HEAP_SORT_H
