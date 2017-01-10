@@ -3,12 +3,40 @@
 #define GEEKS_HEAP_SORT_H
 
 #include "MaxHeap.h"
+#include "MinHeap.h"
 #include "IndexMaxHeap.h"
 
 using namespace std;
 
+
+// use case1:
+// find firt Nth smallest/lagest elements by MinHeap/MaxHeap
+
 template<typename T>
-void heapSort1(T arr[], int n)
+T* findMaxNs(T arr[], int n, int Ns)
+{
+    MinHeap<T> minHeap = MinHeap<T>(Ns);
+    for(int i = 0; i < Ns; ++i)
+        minHeap.insert(arr[i]);
+
+	for(int i = Ns; i < n; ++i)
+	{
+		if(arr[i] > minHeap.getMin())
+		{
+			minHeap.popMin();
+			minHeap.insert(arr[i]);
+		}
+	}
+
+	T* pRet = new T[Ns];
+    for(int i = Ns - 1; i >= 0; --i)
+        pRet[i] = minHeap.popMin();
+
+	return pRet;
+}
+
+template<typename T>
+void maxHeapSort1(T arr[], int n)
 {
 
     MaxHeap<T> maxheap = MaxHeap<T>(n);
@@ -20,7 +48,7 @@ void heapSort1(T arr[], int n)
 }
 
 template<typename T>
-void heapSort2(T arr[], int n)
+void maxHeapSort2(T arr[], int n)
 {
 
     MaxHeap<T> maxheap = MaxHeap<T>(arr,n);
@@ -46,7 +74,7 @@ void __shiftDownV0(T arr[], int n, int k)
 }
 
 template<typename T>
-void heapSort3(T arr[], int n)
+void maxHeapSort3(T arr[], int n)
 {
     for(int i = (n - 1 - 1) / 2; i >= 0; --i)
         __shiftDownV0(arr, n, i);
@@ -79,7 +107,7 @@ void __shiftDown(T arr[], int n, int k)
 }
 
 template<typename T>
-void heapSort4(T arr[], int n)
+void maxHeapSort4(T arr[], int n)
 {
     // build the MaxHeap
 	for(int i = (n - 1 - 1) / 2; i >= 0; --i)
@@ -96,10 +124,29 @@ void heapSort4(T arr[], int n)
 template<typename T>
 void indexMaxHeapSort(T arr[], int n)
 {
-
     IndexMaxHeap<T> indexMaxheap = IndexMaxHeap<T>(arr, n);
     for(int i = n - 1 ; i >= 0; --i)
         arr[i] = indexMaxheap.popMax();
+}
+
+template<typename T>
+void minHeapSort1(T arr[], int n)
+{
+
+    MinHeap<T> minheap = MinHeap<T>(n);
+    for(int i = 0; i < n; ++i)
+        minheap.insert(arr[i]);
+
+    for(int i = 0; i < n; ++i)
+        arr[i] = minheap.popMin();
+}
+
+template<typename T>
+void minHeapSort2(T arr[], int n)
+{
+    MinHeap<T> minheap = MinHeap<T>(arr,n);
+    for(int i = 0; i < n; ++i)
+        arr[i] = minheap.popMin();
 }
 
 #endif //GEEKS_HEAP_SORT_H
