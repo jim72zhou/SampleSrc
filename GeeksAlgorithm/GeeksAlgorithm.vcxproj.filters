@@ -13,6 +13,15 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="Header File\Sort">
+      <UniqueIdentifier>{a63629c2-f13e-46db-9817-8aa92cd7e0b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header File\Heap">
+      <UniqueIdentifier>{b36d0bd1-cbc7-4cd6-8114-844ff320c45a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header File\Tree">
+      <UniqueIdentifier>{a36c189c-d855-49aa-b081-6fec4c497b90}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -24,23 +33,38 @@
     <ClInclude Include="Book.h">
       <Filter>Header File</Filter>
     </ClInclude>
-    <ClInclude Include="Sort\BasicSort.h">
-      <Filter>Header File</Filter>
-    </ClInclude>
     <ClInclude Include="Sort\MergeSort.h">
-      <Filter>Header File</Filter>
+      <Filter>Header File\Sort</Filter>
     </ClInclude>
     <ClInclude Include="Sort\QuickSort.h">
-      <Filter>Header File</Filter>
+      <Filter>Header File\Sort</Filter>
     </ClInclude>
     <ClInclude Include="Sort\SortUseCase.h">
-      <Filter>Header File</Filter>
+      <Filter>Header File\Sort</Filter>
     </ClInclude>
-    <ClInclude Include="Heap\MaxHeap.h">
-      <Filter>Header File</Filter>
+    <ClInclude Include="Sort\BasicSort.h">
+      <Filter>Header File\Sort</Filter>
     </ClInclude>
     <ClInclude Include="Heap\HeapSort.h">
+      <Filter>Header File\Heap</Filter>
+    </ClInclude>
+    <ClInclude Include="Heap\IndexMaxHeap.h">
+      <Filter>Header File\Heap</Filter>
+    </ClInclude>
+    <ClInclude Include="Heap\MinHeap.h">
+      <Filter>Header File\Heap</Filter>
+    </ClInclude>
+    <ClInclude Include="Heap\MaxHeap.h">
+      <Filter>Header File\Heap</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree\BST.h">
+      <Filter>Header File\Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="FileProcs.h">
       <Filter>Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree\SequenceST.h">
+      <Filter>Header File\Tree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

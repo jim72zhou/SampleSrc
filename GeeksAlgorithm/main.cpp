@@ -117,7 +117,7 @@ void sortTest()
 
 void treeTest()
 {
-    string filename = "D:\\Temp\\CppDemo\\GeeksAlgorithm\\Debug\\bible.txt";
+    string filename = "D:\\Temp\\Algorithm.txt";
     vector<string> words;
     if(FileProcs::readFile(filename, words))
 	{
@@ -137,7 +137,7 @@ void treeTest()
                 (*res)++;
         }
 
-        cout << "'god' : " << *bst.search("god") << endl;
+        cout << "'Algorithm' : " << *bst.search("algorithm") << endl;
         time_t endTime = clock();
         cout << "BST , time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
 
@@ -156,7 +156,7 @@ void treeTest()
                 (*res)++;
         }
 
-        cout << "'god' : " << *sst.search("god") << endl;
+        cout << "'Algorithm' : " << *sst.search("algorithm") << endl;
 
         endTime = clock();
         cout << "SequenceST , time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
@@ -166,17 +166,17 @@ void treeTest()
 
 void bstTraverseTest()
 {
-	srand(time(NULL));
+	srand(unsigned(time(NULL)));
 
 	BST<int,int> bst = BST<int,int>();
 
-    int n = 10;
-	cout << "BST Travse Test" << endl;
+    int n = 3;
+	cout << "BST Traverse Test" << endl;
 	cout << "Test data:" << endl;
     for(int i = 0 ; i < n ; ++i)
 	{
         int key = rand()%n;
-        int value = key;
+        int value = key * key + 7;
         cout << key << " ";
         bst.insert(key, value);
     }
@@ -199,6 +199,115 @@ void bstTraverseTest()
     cout << "postOrder: " << endl;
     bst.postOrder();
     cout << endl << endl;
+
+	// test levelOrder
+    cout << "levelOrder: " << endl;
+    bst.levelOrder();
+    cout << endl << endl;
+
+	// test min & max
+    cout << "Min: " << bst.minimum() << ", Max: " << bst.maximum();
+    cout << endl << endl;
+
+	// test removeMin & max
+	bst.removeMin();
+	cout << "RemoveMin: " << endl;
+	cout << "New size: " << bst.size() << endl;
+	bst.inOrder();
+    cout << endl << endl;
+
+	bst.removeMax();
+	cout << "RemoveMax: " << endl;
+	cout << "New size: " << bst.size() << endl;
+	bst.inOrder();
+    cout << endl << endl;
+}
+
+void bstRemoveMinMaxTest()
+{
+	srand(unsigned(time(NULL)));
+
+	BST<int,int> bst = BST<int,int>();
+
+    int n = 2000;
+	cout << "Test data:" << endl;
+    for(int i = 0 ; i < n ; ++i)
+	{
+        int key = rand()%n;
+        int value = key * key + 7;
+        cout << key << " ";
+        bst.insert(key, value);
+    }
+    cout << endl;
+
+    // test size
+    cout << "Size: " << bst.size() << endl << endl;
+
+    cout << "Sorted data: " << endl;
+    bst.inOrder();
+    cout << endl << endl;
+
+	// test min & max
+    cout << "Min: " << bst.minimum() << ", Max: " << bst.maximum();
+    cout << endl << endl;
+
+	// test removeMin & max
+	cout << "Removing... " << endl;
+	int size = bst.size();
+	while(size)
+	{
+		cout << bst.maximum() << " ";
+		bst.removeMax();
+		size = bst.size();
+		if(size)
+		{
+			cout << bst.minimum() << " ";
+			bst.removeMin();
+			size = bst.size();
+		}
+	}
+
+	cout << endl << endl;
+}
+
+void bstRemoveTest()
+{
+	srand(unsigned(time(NULL)));
+
+	BST<int,int> bst = BST<int,int>();
+
+    const int N = 100000;
+	cout << "Test data:" << endl;
+    for(int i = 0; i < N; ++i)
+	{
+        int key = rand()%N;
+        int value = key * key + 7;
+        //cout << key << " ";
+        bst.insert(key, value);
+    }
+
+    cout << endl;
+
+    // test size
+    cout << "Size: " << bst.size() << endl << endl;
+
+	// test remove
+    // remove elements in random order
+    int order[N];
+    for(int i = 0; i < N; ++i)
+        order[i] = i;
+    SortTestUtil::shuffle(order , N);
+
+    for(int i = 0; i < N; ++i)
+	{
+        if(bst.contain(order[i]))
+		{
+            bst.remove(order[i]);
+        }
+	}
+
+	cout<<"After remove, size = " <<bst.size();
+	cout << endl << endl;
 }
 
 int _tmain(int argc, _TCHAR* argv[])
@@ -232,7 +341,11 @@ int _tmain(int argc, _TCHAR* argv[])
 
 ////////////////////////////////////////
 
-	bstTraverseTest();
+	bstRemoveTest();
+
+	//bstRemoveMinMaxTest();
+
+	//bstTraverseTest();
 
 	//treeTest();
 

@@ -9,8 +9,8 @@
 using namespace std;
 
 
-namespace SortTestUtil {
-
+namespace SortTestUtil
+{
     // generate n random elements, every element is in [rangeLo, rangeHi]
     int *generateRandomArray(int n, int rangeLo, int rangeHi) 
 	{
@@ -55,6 +55,16 @@ namespace SortTestUtil {
 			swap(a[i], a[n - i - 1]);
     }
 
+	void shuffle(int arr[], int n)
+	{
+		srand(unsigned(time(NULL)));
+		for(int i = n - 1; i >= 0; --i)
+		{
+			int x = rand() % (i + 1);
+			swap(arr[i] , arr[x]);
+		}
+	}
+
     template<typename T>
     void printArray(T arr[], int n) 
 	{
@@ -88,4 +98,5 @@ namespace SortTestUtil {
     }
 
 };
+
 #endif //GEEKS_SORT_SORTTESTUTIL_H
