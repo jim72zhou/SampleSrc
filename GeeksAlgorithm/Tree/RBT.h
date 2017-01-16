@@ -1,5 +1,5 @@
-﻿#ifndef GEEKS_BST_H
-#define GEEKS_BST_H
+﻿#ifndef GEEKS_RBT_H
+#define GEEKS_RBT_H
 
 #include <queue>
 #include <cassert>
@@ -7,49 +7,68 @@
 using namespace std;
 
 // A basic concise introduction and links of related info
-// https://en.wikipedia.org/wiki/Binary_search_tree
+// https://en.wikipedia.org/wiki/Red-black_tree
+// http://www.geeksforgeeks.org/red-black-tree-set-1-introduction-2/
 
-// Tree Terminology
-// https://en.wikipedia.org/wiki/Tree_(data_structure)#Terminology
+/* 5 basic rules:
+1. Each node is either red or black.
+2. The root is black.
+3. There are no two adjacent red nodes (A red node cannot have a red parent or red child).
+4. Every path from a given node to any of its descendant NIL nodes contains the same number of black nodes. 
+5. All leaves (NIL) are black.
 
-// Tree traversal: Pre-order, In-order, Post-order...
-// https://en.wikipedia.org/wiki/Tree_traversal
+Comparison with AVL Tree
+The AVL trees are more balanced compared to Red Black Trees, but they may cause more rotations during insertion and deletion. 
+So if your application involves many frequent insertions and deletions, then Red Black trees should be preferred. 
+And if the insertions and deletions are less frequent and search is more frequent operation, then AVL tree should be preferred over Red Black Tree.
+*/
 
 template <typename Key, typename Value>
-class BST
+class RBT
 {
 private:
+	enum Color
+	{
+		RED, 
+		BLACK
+	};
+
 	struct TreeNode
 	{
 		Key key;
 		Value value;
+		Color color;
 		TreeNode *left;
 		TreeNode *right;
+		TreeNode *parent;
 
 		TreeNode(Key key, Value value)
 		{
 			this->key = key;
 			this->value = value;
-			this->left = this->right = nullptr;
+			this->color = RED;
+			this->left = this->right = this->parent = nullptr;
 		}
 
 		TreeNode(TreeNode *node)
 		{
 			this->key = node->key;
 			this->value = node->value;
+			this->color = node->color;
 			this->left = node->left;
 			this->right = node->right;
+			this->right = node->parent;
 		}
 	};
 
 public:
-	BST()
+	RBT()
 	{
 		m_count = 0;
 		m_root = nullptr;
 	}
 
-	~BST()
+	~RBT()
 	{
 		destroy(m_root);
 	}
@@ -66,7 +85,10 @@ public:
 	
 	void insert(Key key, Value value)
 	{
-		m_root = insert(m_root, key, value);
+		TreeNode *node = new TreeNode(key, value);
+		m_root = insert(m_root, node);
+
+		fixViolation(m_root, node);
 	}
 
 	bool contain(Key key)
@@ -169,31 +191,33 @@ public:
     }
 
 private:
-	TreeNode* insert(TreeNode *node, Key key, Value value)
+	TreeNode* insert(TreeNode *root, TreeNode *node)
 	{
-		if(node == nullptr)
+		if(root == nullptr)
 		{
 			++m_count;
-			return new TreeNode(key, value);
+			return node;
 		}
 
-		// This BST is that the key in each node must be 
+		// This BST is that the key in each root must be 
 		// greater than all keys stored in the left sub-tree, 
 		// and not greater than any key in the right sub-tree
-		if(node->key == key)
+		if(node->key == root->key)
 		{
-			node->value = value;
+			root->value = node->value;
 		}
-		else if(key < node->key)
+		else if(node->key < root->key)
 		{
-			node->left = insert(node->left, key, value);
+			root->left = insert(root->left, node);
+			root->left->parent = root;
 		}
-		else   // key > node->key
+		else   // key > root->key
 		{
-			node->right = insert(node->right, key, value);
+			root->right = insert(root->right, node);
+			root->right->parent = root;
 		}
 
-		return node;
+		return root;
 	}
 
 	bool contain(TreeNode* node, Key key)
@@ -241,7 +265,7 @@ private:
 	// just a placeholder for actual usage
 	void nodeAction(TreeNode * node)
 	{
-		cout<< "(" << node->key << "," << node->value << ") ";
+		cout<< "(" << node->key << "," << node->value << "," << ((node->color == RED) ? "R" : "B") << ") ";
 	}
 
 	void preOrder(TreeNode * node)
@@ -423,7 +447,8 @@ private:
         else if(node->key < key)
             return ceil(node->right , key);
 		else    // node->key > key
-        {			
+        {
+			
 			// node may be key's ceil node, 
 			// node->key may be less and greater than key, so need try node->left
 			TreeNode* tempNode = ceil(node->left , key);
@@ -432,7 +457,6 @@ private:
 			else
 				return node;
 		}
-        
     }
 
    // destroy the node as postOrder
@@ -447,8 +471,143 @@ private:
 		--m_count;
     }
 
+	// http://www.geeksforgeeks.org/red-black-tree-set-2-insert/
+    void fixViolation(TreeNode * &root, TreeNode *&node)
+	{
+		TreeNode *parentNode = nullptr;
+		TreeNode *grandParentNode = nullptr;
+ 
+		while ((node != root) && (node->color != BLACK) &&
+			   (node->parent->color == RED))
+		{
+ 			parentNode = node->parent;
+			grandParentNode = node->parent->parent;
+ 
+			/*  Case : A
+				Parent of node is left child of Grand-parent of node */
+			if (parentNode == grandParentNode->left)
+			{
+				TreeNode *uncleNode = grandParentNode->right;
+ 
+				/* Case : 1
+				   The uncle of node is also red
+				   Only Recoloring required */
+				if (uncleNode != nullptr && uncleNode->color == RED)
+				{
+					grandParentNode->color = RED;
+					parentNode->color = BLACK;
+					uncleNode->color = BLACK;
+					node = grandParentNode;
+				}
+				else
+				{
+					/* Case : 2
+					   node is right child of its parent
+					   Left-rotation required */
+					if (node == parentNode->right)
+					{
+						rotateLeft(root, parentNode);
+						node = parentNode;
+						parentNode = node->parent;
+					}
+ 
+					/* Case : 3
+					   node is left child of its parent
+					   Right-rotation required */
+					rotateRight(root, grandParentNode);
+					swap(parentNode->color, grandParentNode->color);
+					node = parentNode;
+				}
+			}
+ 
+			/* Case : B
+			   Parent of node is right child of Grand-parent of node */
+			else
+			{
+				TreeNode *uncleNode = grandParentNode->left;
+ 
+				/*  Case : 1
+					The uncle of node is also red
+					Only Recoloring required */
+				if ((uncleNode != nullptr) && (uncleNode->color == RED))
+				{
+					grandParentNode->color = RED;
+					parentNode->color = BLACK;
+					uncleNode->color = BLACK;
+					node = grandParentNode;
+				}
+				else
+				{
+					/* Case : 2
+					   node is left child of its parent
+					   Right-rotation required */
+					if (node == parentNode->left)
+					{
+						rotateRight(root, parentNode);
+						node = parentNode;
+						parentNode = node->parent;
+					}
+ 
+					/* Case : 3
+					   node is right child of its parent
+					   Left-rotation required */
+					rotateLeft(root, grandParentNode);
+					swap(parentNode->color, grandParentNode->color);
+					node = parentNode;
+				}
+			}
+		}
+ 
+		root->color = BLACK;
+	}
+
+	void rotateLeft(TreeNode * &root, TreeNode *&node)
+	{
+		TreeNode *rightNode = node->right;
+ 
+		node->right = rightNode->left;
+ 
+		if (node->right != nullptr)
+			node->right->parent = node;
+ 
+		rightNode->parent = node->parent;
+ 
+		if (node->parent == nullptr)
+			root = rightNode;
+		else if (node == node->parent->left)
+			node->parent->left = rightNode;
+		else
+			node->parent->right = rightNode;
+ 
+		rightNode->left = node;
+		node->parent = rightNode;
+	}
+ 
+	void rotateRight(TreeNode * &root, TreeNode *&node)
+	{
+		TreeNode *leftNode = node->left;
+ 
+		node->left = leftNode->right;
+ 
+		if (node->left != nullptr)
+			node->left->parent = node;
+ 
+		leftNode->parent = node->parent;
+ 
+		if (node->parent == nullptr)
+			root = leftNode;
+ 
+		else if (node == node->parent->left)
+			node->parent->left = leftNode;
+		else
+			node->parent->right = leftNode;
+ 
+		leftNode->right = node;
+		node->parent = leftNode;
+	}
+
     TreeNode *m_root;
     int m_count;
 };
 
-#endif //GEEKS_BST_H
+#endif //GEEKS_RBT_H
