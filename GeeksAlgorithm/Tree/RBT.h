@@ -95,7 +95,14 @@ public:
 	
 	void insert(Key key, Value value)
 	{
-		TreeNode *node = new TreeNode(key, value);
+		TreeNode* node = search(m_root, key);
+		if(node != nil)
+		{
+			node->value = value;
+			return;
+		}
+
+		node = new TreeNode(key, value);
 		insert(node);
 
 		insertFixup(node);
@@ -110,7 +117,7 @@ public:
     Value* search(Key key)
 	{
         TreeNode* node = search(m_root, key);
-		if(node)
+		if(node != nil)
 			return &(node->value);
 		else
 			return nullptr;
@@ -651,8 +658,8 @@ private:
 		}
     }
 
-   // destroy the node as postOrder
-   void destroy(TreeNode * node)
+	// destroy the node as postOrder
+	void destroy(TreeNode * node)
 	{
         if(node == nil)
 			return;
