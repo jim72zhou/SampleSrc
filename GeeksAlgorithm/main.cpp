@@ -16,6 +16,7 @@
 #include "Heap\HeapSort.h"
 
 #include "Tree\BST.h"
+#include "Tree\RBT.h"
 #include "Tree\SequenceST.h"
 
 #include "Book.h"
@@ -24,8 +25,11 @@
 
 using namespace std;
 
-void sortTest()
+void sortTest(bool bTest)
 {
+	if(!bTest)
+		return;
+	
 	const int NUM = 100000;
 	const int MAX = 10;
 
@@ -115,57 +119,145 @@ void sortTest()
 	*/
 }
 
-void treeTest()
+void bstTest(bool bTest)
 {
-    string filename = "D:\\Temp\\Algorithm.txt";
+    if(!bTest)
+		return;
+
+	string filename = "D:\\Temp\\Algorithm.txt";
     vector<string> words;
     if(FileProcs::readFile(filename, words))
 	{
         cout << "There are totally " << words.size() << " words in " << filename << endl;
-
         cout << endl;
 
-        // test BST
-        time_t startTime = clock();
-        BST<string, int> bst = BST<string, int>();
-        for (vector<string>::iterator iter = words.begin(); iter != words.end(); iter++)
+		// Almost random test
 		{
-            int *res = bst.search(*iter);
-            if (res == nullptr)
-                bst.insert(*iter, 1);
-            else
-                (*res)++;
-        }
+			// test BST
+			time_t startTime = clock();
+			BST<string, int> bst = BST<string, int>();
+			for (vector<string>::iterator iter = words.begin(); iter != words.end(); iter++)
+			{
+				int *res = bst.search(*iter);
+				if (res == nullptr)
+					bst.insert(*iter, 1);
+				else
+					(*res)++;
+			}
 
-        cout << "'Algorithm' : " << *bst.search("algorithm") << endl;
-        time_t endTime = clock();
-        cout << "BST , time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
+			cout << "'Algorithm' : " << *bst.search("algorithm") << endl;
+			time_t endTime = clock();
+			cout << "BST(Almost random) time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
 
-        cout << endl;
+			cout << endl;
+
+			// test SequenceST
+			startTime = clock();
+			SequenceST<string, int> sst = SequenceST<string, int>();
+			for(vector<string>::iterator iter = words.begin(); iter != words.end(); iter++) 
+			{
+				int *res = sst.search(*iter);
+				if (res == nullptr)
+					sst.insert(*iter, 1);
+				else
+					(*res)++;
+			}
+
+			cout << "'Algorithm' : " << *sst.search("algorithm") << endl;
+
+			endTime = clock();
+			cout << "SequenceST(Almost random) time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
+
+			cout << endl;
+
+			// test RBT
+			startTime = clock();
+			RBT<string, int> rbt = RBT<string, int>();
+
+			for (vector<string>::iterator iter = words.begin(); iter != words.end(); iter++) 
+			{
+				int *res = rbt.search(*iter);
+				if (res == nullptr)
+					rbt.insert(*iter, 1);
+				else
+					(*res)++;
+			}
+
+			cout << "'Algorithm' : " << *rbt.search("algorithm") << endl;
+			endTime = clock();
+			cout << "RBT(Almost random) time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
+
+			cout << endl;
+		}
 
 
-        // test SequenceST
-        startTime = clock();
-        SequenceST<string, int> sst = SequenceST<string, int>();
-        for(vector<string>::iterator iter = words.begin(); iter != words.end(); iter++) 
+		// sorted data test
+        sort(words.begin() , words.end());
 		{
-            int *res = sst.search(*iter);
-            if (res == nullptr)
-                sst.insert(*iter, 1);
-            else
-                (*res)++;
-        }
+			// test BST
+			time_t startTime = clock();
+			BST<string, int> bst = BST<string, int>();
+			for (vector<string>::iterator iter = words.begin(); iter != words.end(); iter++)
+			{
+				int *res = bst.search(*iter);
+				if (res == nullptr)
+					bst.insert(*iter, 1);
+				else
+					(*res)++;
+			}
 
-        cout << "'Algorithm' : " << *sst.search("algorithm") << endl;
+			cout << "'Algorithm' : " << *bst.search("algorithm") << endl;
+			time_t endTime = clock();
+			cout << "BST(sorted) time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
 
-        endTime = clock();
-        cout << "SequenceST , time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
+			cout << endl;
 
+			// test SequenceST
+			startTime = clock();
+			SequenceST<string, int> sst = SequenceST<string, int>();
+			for(vector<string>::iterator iter = words.begin(); iter != words.end(); iter++) 
+			{
+				int *res = sst.search(*iter);
+				if (res == nullptr)
+					sst.insert(*iter, 1);
+				else
+					(*res)++;
+			}
+
+			cout << "'Algorithm' : " << *sst.search("algorithm") << endl;
+
+			endTime = clock();
+			cout << "SequenceST(sorted) time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
+
+			cout << endl;
+
+			// test RBT
+			startTime = clock();
+			RBT<string, int> rbt = RBT<string, int>();
+
+			for (vector<string>::iterator iter = words.begin(); iter != words.end(); iter++) 
+			{
+				int *res = rbt.search(*iter);
+				if (res == nullptr)
+					rbt.insert(*iter, 1);
+				else
+					(*res)++;
+			}
+
+			cout << "'Algorithm' : " << *rbt.search("algorithm") << endl;
+			endTime = clock();
+			cout << "RBT(sorted) time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
+
+			cout << endl;
+		}
     }
 }
 
-void bstTraverseTest()
+void bstTraverseTest(bool bTest)
 {
+	if(!bTest)
+		return;
+
 	srand(unsigned(time(NULL)));
 
 	BST<int,int> bst = BST<int,int>();
@@ -223,8 +315,11 @@ void bstTraverseTest()
     cout << endl << endl;
 }
 
-void bstRemoveMinMaxTest()
+void bstRemoveMinMaxTest(bool bTest)
 {
+	if(!bTest)
+		return;
+
 	srand(unsigned(time(NULL)));
 
 	BST<int,int> bst = BST<int,int>();
@@ -270,8 +365,11 @@ void bstRemoveMinMaxTest()
 	cout << endl << endl;
 }
 
-void bstRemoveTest()
+void bstRemoveTest(bool bTest)
 {
+	if(!bTest)
+		return;
+
 	srand(unsigned(time(NULL)));
 
 	BST<int,int> bst = BST<int,int>();
@@ -310,46 +408,149 @@ void bstRemoveTest()
 	cout << endl << endl;
 }
 
+void bstCeilFloorTest(bool bTest)
+{
+	if(!bTest)
+		return;
+
+    BST<int,int> bst;
+
+    for(int i = 2 ; i < 20 ; i += 2)
+        bst.insert(i, i);
+    for( int i = 0 ; i <= 20 ; i ++ )
+	{
+        int* floorKey = bst.floor(i);
+        cout<<"the floor of "<<i<<" is ";
+        if( floorKey == nullptr )
+            cout<<"NULL"<<endl;
+        else
+            cout<<*floorKey<<endl;
+
+        int* ceilKey = bst.ceil(i);
+        cout<<"the ceil of "<<i<<" is ";
+        if( ceilKey == nullptr )
+            cout<<"NULL"<<endl;
+        else
+            cout<<*ceilKey<<endl;
+
+        cout<<endl;
+    }
+}
+
+void rbtTest(bool bTest)
+{
+	if(!bTest)
+		return;
+
+	srand(unsigned(time(NULL)));
+	const int N  = 20;
+
+    RBT<int, int> rbt;
+ 
+	cout << "data counting...";
+    for(int i = 0; i < N; ++i)
+	{
+		rbt.insert(i, i * 3 - 7);
+		cout << rbt.size() << " ";
+	}
+
+	for(int i = 0 ; i < 6; ++i)
+	{
+        int key = rand()%N;
+		rbt.insert(key, key * 7);
+		cout << "(" << key << ")" << rbt.size() << " ";
+	}
+ 
+    cout << endl;
+	cout << "Inoder Traversal of Created Tree\n";
+    rbt.inOrder();
+ 
+    cout << "\n\nLevel Order Traversal of Created Tree\n";
+    rbt.levelOrder();
+}
+
+void rbtRemoveTest(bool bTest)
+{
+	if(!bTest)
+		return;
+
+    srand(unsigned(time(NULL)));
+	const int N  = 20;
+	RBT<int, int> rbt;
+ 
+    for(int i = 0; i < N; ++i)
+	{
+		rbt.insert(i, i * 3 - 7);
+	}
+ 
+    cout << "Inoder Traversal of Created Tree\n";
+    rbt.inOrder();
+ 
+    cout << "\n\nLevel Order Traversal of Created Tree\n";
+    rbt.levelOrder();
+
+	cout << "\nRemoving data";
+	
+    for(int i = 0 ; i < N ; ++i)
+	{
+        int key = rand()%N;
+		cout << "..." << key;
+		rbt.remove(key);
+		cout << " -> " << rbt.size() << " ";
+		//rbt.levelOrder();
+		//cout << endl;
+	}
+	cout << endl;
+	cout << "Remaining data:" << endl;
+	rbt.inOrder();
+	cout << endl;
+
+	int remaining = rbt.size();
+	for(int i = 0; i < remaining; ++i)
+	{
+		rbt.removeMax();
+		cout << rbt.size() << " ";
+		cout << endl;
+		rbt.inOrder();
+		cout << endl;
+	}
+}
+
+void prototypeTest(bool bTest)
+{
+	if(!bTest)
+		return;
+
+	RBT<int, int> rbt;
+ 
+    for(int i = 7; i > 0; --i)
+	{
+		rbt.insert(i, i);
+	}
+ 
+    cout << "Inoder Traversal of Created Tree\n";
+    rbt.inOrder();
+ 
+    cout << "\n\nLevel Order Traversal of Created Tree\n";
+    rbt.levelOrder();
+}
+////////////////////////////////////////
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 
-////////////////////////////////////////
-// placehold to verify for special test
-#if 0
-    //IndexMaxHeap<int> indexMaxheap = IndexMaxHeap<int>(100);
-
-    srand(unsigned int(time(nullptr)));
-	cout << "Prepate the data" << endl;
-	int data[100];
-    for(int i = 0 ; i < 100 ; ++i)
-	{
-		int e = rand()%100;
-		//cout << "(" << i + 1 << "," << e << ") ";
-		data[i] = e;
-    }
-	cout << endl;
-
-	BST<int, int> bst = BST<int, int>();
-	bst.insert(10, 10);
-	bst.insert(9, 9);
-	bst.insert(12, 12);
-	bst.printData();
-
-	cout << endl;
-
-#endif
-
-////////////////////////////////////////
-
-	bstRemoveTest();
-
-	//bstRemoveMinMaxTest();
-
-	//bstTraverseTest();
-
-	//treeTest();
-
-	//sortTest();
+	prototypeTest(false);
+	
+	rbtTest(false);
+	rbtRemoveTest(true);
+	
+	bstCeilFloorTest(false);
+	bstRemoveTest(false);
+	bstRemoveMinMaxTest(false);
+	bstTraverseTest(false);
+	bstTest(false);
+	
+	sortTest(false);
 
 	//system("pause");
 	return 0;
