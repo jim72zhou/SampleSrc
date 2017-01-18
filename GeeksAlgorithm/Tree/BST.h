@@ -183,6 +183,7 @@ private:
 		if(node->key == key)
 		{
 			node->value = value;
+			delete node;	// new node isn't added to the tree
 		}
 		else if(key < node->key)
 		{

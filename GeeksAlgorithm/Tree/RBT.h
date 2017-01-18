@@ -9,13 +9,15 @@ using namespace std;
 // A basic concise introduction and links of related info
 // https://en.wikipedia.org/wiki/Red-black_tree
 // http://www.geeksforgeeks.org/red-black-tree-set-1-introduction-2/
+// https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/lecture-10-red-black-trees-rotations-insertions-deletions/lec10.pdf
+// <<Introduction to Algorithms算法导论>> is the most complete and accurate description
 
 /* 5 basic rules:
 1. Each node is either red or black.
 2. The root is black.
-3. There are no two adjacent red nodes (A red node cannot have a red parent or red child).
-4. Every path from a given node to any of its descendant NIL nodes contains the same number of black nodes. 
-5. All leaves (NIL) are black.
+3. All leaves (NIL) are black.
+4. There are no two adjacent red nodes (A red node cannot have a red parent or red child).
+5. Every path from a given node to any of its descendant NIL nodes contains the same number of black nodes. 
 
 Comparison with AVL Tree
 The AVL trees are more balanced compared to Red Black Trees, but they may cause more rotations during insertion and deletion. 
@@ -42,6 +44,12 @@ private:
 		TreeNode *right;
 		TreeNode *parent;
 
+		TreeNode()
+		{
+			this->color = BLACK;
+			this->left = this->right = this->parent = nullptr;
+		}
+		
 		TreeNode(Key key, Value value)
 		{
 			this->key = key;
@@ -57,7 +65,7 @@ private:
 			this->color = node->color;
 			this->left = node->left;
 			this->right = node->right;
-			this->right = node->parent;
+			this->parent = node->parent;
 		}
 	};
 
@@ -65,12 +73,14 @@ public:
 	RBT()
 	{
 		m_count = 0;
-		m_root = nullptr;
+		nil = new TreeNode(); // sentry for NIL
+		m_root = nil;
 	}
 
 	~RBT()
 	{
 		destroy(m_root);
+		delete nil;
 	}
 
 	bool isEmpty()
@@ -86,9 +96,10 @@ public:
 	void insert(Key key, Value value)
 	{
 		TreeNode *node = new TreeNode(key, value);
-		m_root = insert(m_root, node);
+		insert(node);
 
-		fixViolation(m_root, node);
+		insertFixup(node);
+		++m_count;
 	}
 
 	bool contain(Key key)
@@ -98,7 +109,11 @@ public:
 
     Value* search(Key key)
 	{
-        return search(m_root, key);
+        TreeNode* node = search(m_root, key);
+		if(node)
+			return &(node->value);
+		else
+			return nullptr;
     }
 
 	// Depth-first search: Pre-order, In-order, Post-order
@@ -122,7 +137,7 @@ public:
     // https://en.wikipedia.org/wiki/Tree_traversal
 	void levelOrder()
 	{
-		if(m_root == nullptr)
+		if(m_root == nil)
 			return;
 
 		queue<TreeNode*> q;		
@@ -134,42 +149,46 @@ public:
 
 			nodeAction(node);
 
-			if(node->left)
+			if(node->left != nil)
 				q.emplace(node->left);
-			if(node->right)
+			if(node->right != nil)
 				q.emplace(node->right);
 		}
 	}
 
     Key minimum()
 	{
-        assert(m_root != nullptr);
+        assert(m_root != nil);
         TreeNode* minNode = minimum(m_root);
         return minNode->key;
     }
 
     Key maximum()
 	{
-        assert(m_root != nullptr);
+        assert(m_root != nil);
         TreeNode* maxNode = maximum(m_root);
         return maxNode->key;
     }
 
-    void removeMin()
+    void remove(Key key)
 	{
-        if(m_root)
-            m_root = removeMin(m_root);
+		TreeNode* node = search(m_root, key);
+		if(node != nil)
+		{
+			remove(node);
+			delete node;
+			--m_count;
+		}
+    }
+
+	void removeMin()
+	{
+		remove(minimum());
     }
 
     void removeMax()
 	{
-        if(m_root)
-            m_root = removeMax(m_root);
-    }
-
-    void remove(Key key)
-	{
-        m_root = remove(m_root, key);
+        remove(maximum());
     }
 
     Key* floor(Key key)
@@ -191,38 +210,35 @@ public:
     }
 
 private:
-	TreeNode* insert(TreeNode *root, TreeNode *node)
+	void insert(TreeNode *z)
 	{
-		if(root == nullptr)
+		TreeNode* y = nil;
+		TreeNode* x = m_root;
+		
+		while(x != nil)
 		{
-			++m_count;
-			return node;
+			y = x;
+			if(z->key < x->key)
+				x = x->left;
+			else
+				x = x->right;
 		}
 
-		// This BST is that the key in each root must be 
-		// greater than all keys stored in the left sub-tree, 
-		// and not greater than any key in the right sub-tree
-		if(node->key == root->key)
-		{
-			root->value = node->value;
-		}
-		else if(node->key < root->key)
-		{
-			root->left = insert(root->left, node);
-			root->left->parent = root;
-		}
-		else   // key > root->key
-		{
-			root->right = insert(root->right, node);
-			root->right->parent = root;
-		}
+		z->parent = y;
+		if(y == nil)
+			m_root = z;
+		else if(z->key < y->key)
+			y->left = z;
+		else
+			y->right = z;
 
-		return root;
+		z->left = nil;
+		z->right = nil;
 	}
 
 	bool contain(TreeNode* node, Key key)
 	{
-        if(node == nullptr)
+        if(node == nil)
 		{
 			return false;
 		}
@@ -241,24 +257,24 @@ private:
 		}
     }
 
-    Value* search(TreeNode* node, Key key)
+    TreeNode* search(TreeNode* root, Key key)
 	{
-        if(node == nullptr)
+        if(root == nil)
 		{
-			return nullptr;
+			return nil;
 		}
 
-		if(node->key == key)
+		if(root->key == key)
 		{
-			return &(node->value);
+			return root;
 		}
-		else if(key < node->key)
+		else if(key < root->key)
 		{
-			return search(node->left, key);
+			return search(root->left, key);
 		}
-		else   // key > node->key
+		else   // key > root->key
 		{
-			return search(node->right, key);
+			return search(root->right, key);
 		}
     }
 
@@ -270,7 +286,7 @@ private:
 
 	void preOrder(TreeNode * node)
 	{
-        if(node == nullptr)
+        if(node == nil)
 			return;
 		
 		nodeAction(node);
@@ -280,7 +296,7 @@ private:
 
     void inOrder(TreeNode * node)
 	{
-        if(node == nullptr)
+        if(node == nil)
 			return;
 
 		inOrder(node->left);
@@ -290,7 +306,7 @@ private:
 
    void postOrder(TreeNode * node)
 	{
-        if(node == nullptr)
+        if(node == nil)
 			return;
 
 		postOrder(node->left);
@@ -301,7 +317,7 @@ private:
     // implemented as iteratively 
     TreeNode* minimum(TreeNode* node)
 	{
-		while(node->left)
+		while(node->left != nil)
 			node = node->left;
 
 		return node;
@@ -310,115 +326,291 @@ private:
 	// implemented as recursively
     TreeNode* maximum(TreeNode* node)
 	{
-        if(node->right == nullptr)
+        if(node->right == nil)
 			return node;
 
 		return maximum(node->right);
     }
 
-	// implemented as recursively
-	// remove the min node from root node
-    // return new root after deleted min node
-    TreeNode* removeMin(TreeNode* node)
+	void transplant(TreeNode* u, TreeNode* v)
 	{
-		if(node->left == nullptr)
-		{
-			TreeNode * rightNode = node->right;
-			delete node;
-			--m_count;
+		if(u->parent == nil)
+			m_root = v;
+		else if(u == u->parent->left)
+			u->parent->left = v;
+		else
+			u->parent->right = v;
 
-			return rightNode;
-		}
+		v->parent = u->parent;
+	}
 
-		node->left = removeMin(node->left);
-		return node;
-    }
-
-	// implemented as iteratively
-	// remove the max node from root node
-    // return new root after deleted max node
-    TreeNode* removeMax(TreeNode* node)
+	void remove(TreeNode* z)
 	{
-		TreeNode* rootNode = node;
-		TreeNode* parentNode = nullptr;
-		while(node->right)
+		TreeNode* y = z;
+		int yColor = y->color;
+		TreeNode* x = nil;
+
+		if(z->left == nil)  // has no left child
 		{
-			parentNode = node;
-			node = node->right;
+			x = z->right;
+			transplant(z, z->right);
 		}
-
-		--m_count;
-		TreeNode* leftNode = node->left;
-		delete node;
-
-		if(parentNode)
+		else if(z->right == nil) // has  no right child
 		{
-			parentNode->right = leftNode;
-			return rootNode;
+			x = z->left;
+			transplant(z, z->left);
 		}
-		else    // input node is root node
+		else  // have both left and right children
 		{
-			return leftNode;
-		}
-    }
+			y = minimum(z->right);
+			yColor = y->color;
+			x = y->right;
 
-	TreeNode* remove(TreeNode* node, Key key)
-	{
-		if(node == nullptr)
-            return nullptr;
-
-        if(key < node->key)
-		{
-            node->left = remove(node->left, key);
-            return node;
-        }
-        else if(key > node->key)
-		{
-            node->right = remove(node->right, key);
-            return node;
-        }
-        else   // key == node->key
-		{
-			TreeNode *successor = nullptr;
-			if(node->left == nullptr)
+			if(y->parent == z)
+				x->parent = y;
+			else
 			{
-				successor = node->right;
-			}
-			else if(node->right == nullptr)
-			{
-				successor = node->left;
-			}
-			else   // node->left != nullptr && node->right != nullptr
-			 
-			// This page explains it very concisely and clearly
-			// http://quiz.geeksforgeeks.org/binary-search-tree-set-2-delete/
-
-			// Find inorder successor of the node, and copy contents of the 
-			// inorder successor to the node and delete the inorder successor. 
-			// In this particular case, inorder successor can be obtained by 
-			// finding the minimum value in right child of the node.
-
-			// Note that inorder predecessor can also be used.
-			{
-				successor = new TreeNode(minimum(node->right));
-				++m_count;
-
-				successor->right = removeMin(node->right);
-				successor->left = node->left;
+				transplant(y, y->right);
+				y->right = z->right;
+				y->right->parent = y;
 			}
 
-			delete node;
-            --m_count;
-
-            return successor;
+			transplant(z, y);
+			y->left = z->left;
+			y->left->parent = y;
+			y->color = z->color;
 		}
-    }
+
+		if(yColor == BLACK)
+			removeFixup(x);
+	}
+
+	void removeFixup(TreeNode* x)
+	{
+		while(x != m_root && x->color == BLACK)
+		{
+			/*  Case : A
+				Parent of x is left child of parent of x */
+			if(x == x->parent->left)
+			{
+				TreeNode* w = x->parent->right; // sibling node
+
+				// Case 1
+				if(w->color == RED)
+				{
+					// parent->color should be BLACK in this case
+					w->color = BLACK;
+					x->parent->color = RED;
+					rotateLeft(x->parent);
+					w = x->parent->right;
+				}
+
+				// Case 2
+				if(w->left->color == BLACK && w->right->color == BLACK)
+				{
+					w->color = RED;
+					x = x->parent;
+				}
+			   else
+			   {
+					// Case 3
+					if(w->right->color == BLACK)
+					{
+						w->left->color = BLACK;
+						w->color = RED;
+						rotateRight(w);
+						w = x->parent->right;
+					}
+
+					// Case 4
+					w->color = x->parent->color;
+					x->parent->color = BLACK;
+					w->right->color = BLACK;
+					rotateLeft(x->parent);
+					x = m_root;
+				}
+			}
+			/*  Case : B
+				Parent of x is right child of parent of x */
+			else
+			{
+				TreeNode* w = x->parent->left; // sibling node
+
+				// Case 1
+				if(w->color == RED)
+				{
+					w->color = BLACK;
+					w->parent->color = RED;
+					rotateRight(x->parent);
+					w = x->parent->left;
+				}
+				// Case 2
+				else if(w->left->color == BLACK && w->right->color == BLACK)
+				{
+					w->color = RED;
+					x = x->parent;
+				}
+				else
+				{
+					// Case 3
+					if(w->left->color == BLACK)
+					{
+						w->right->color = BLACK;
+						w->color = RED;
+						rotateLeft(w);
+						w = x->parent->left;
+					}
+					// Case 4
+					w->color = x->parent->color;
+					x->parent->color = BLACK;
+					w->left->color = BLACK;
+					rotateRight(x->parent);
+					x = m_root;
+				}
+			}
+		}
+
+		x->color = BLACK;
+	}
+
+	// http://www.geeksforgeeks.org/red-black-tree-set-2-insert/
+    void insertFixup(TreeNode* z)
+	{
+		TreeNode *parentNode = nil;
+		TreeNode *grandParentNode = nil;
+ 
+		while((z != m_root) && (z->parent->color == RED))
+		{
+ 			parentNode = z->parent;
+			grandParentNode = z->parent->parent;
+ 
+			/*  Case : A
+				Parent of z is left child of Grand-parent of z */
+			if (parentNode == grandParentNode->left)
+			{
+				TreeNode* y = grandParentNode->right;	// Uncle node
+ 
+				/* Case : 1
+				   The uncle of z is also red
+				   Only Recoloring required */
+				if (y != nil && y->color == RED)
+				{
+					parentNode->color = BLACK;
+					y->color = BLACK;
+					grandParentNode->color = RED;			
+					z = grandParentNode;
+				}
+				else
+				{
+					/* Case : 2
+					   z is right child of its parent
+					   Left-rotation required */
+					if (z == parentNode->right)
+					{
+						z = parentNode;
+						rotateLeft(z);
+					}
+ 
+					/* Case : 3
+					   z is left child of its parent
+					   Right-rotation required */
+					z->parent->color = BLACK;
+					z->parent->parent->color = RED;
+					rotateRight(z->parent->parent);
+				}
+			}
+ 
+			/* Case : B
+			   Parent of z is right child of Grand-parent of z */
+			else
+			{
+				TreeNode *y = grandParentNode->left;
+ 
+				/*  Case : 1
+					The uncle of z is also red
+					Only Recoloring required */
+				if ((y != nil) && (y->color == RED))
+				{
+					parentNode->color = BLACK;
+					y->color = BLACK;
+					grandParentNode->color = RED;					
+					z = grandParentNode;
+				}
+				else
+				{
+					/* Case : 2
+					   z is left child of its parent
+					   Right-rotation required */
+					if (z == parentNode->left)
+					{
+						z = parentNode;
+						rotateRight(z);
+					}
+ 
+					/* Case : 3
+					   z is right child of its parent
+					   Left-rotation required */
+					z->parent->color = BLACK;
+					z->parent->parent->color = RED;
+					rotateLeft(z->parent->parent);
+				}
+			}
+		}
+ 
+		m_root->color = BLACK;
+	}
+
+	// https://en.wikipedia.org/wiki/Tree_rotation
+	// Illustration here is intuitive(B=x, A=y in below source)
+	void rotateLeft(TreeNode* x)
+	{
+		TreeNode* y = x->right;
+ 
+		x->right = y->left;
+ 
+		if (x->right != nil)
+			x->right->parent = x;
+ 
+		y->parent = x->parent;
+ 
+		if (x->parent == nil)
+			m_root = y;
+		else if (x == x->parent->left)
+			x->parent->left = y;
+		else
+			x->parent->right = y;
+ 
+		y->left = x;
+		x->parent = y;
+	}
+ 
+	void rotateRight(TreeNode* x)
+	{
+		TreeNode* y = x->left;
+ 
+		x->left = y->right;
+ 
+		if (x->left != nil)
+			x->left->parent = x;
+ 
+		y->parent = x->parent;
+ 
+		if (x->parent == nil)
+			m_root = y;
+		else if (x == x->parent->left)
+			x->parent->left = y;
+		else
+			x->parent->right = y;
+ 
+		y->right = x;
+		x->parent = y;
+	}
 
 	// Find key's floor in the bst that node is the root
     TreeNode* floor(TreeNode* node, Key key)
 	{
-        if(node == nullptr)
-            return nullptr;
+        if(node == nil)
+            return nil;
 
 		if(node->key == key)
             return node;
@@ -429,7 +621,7 @@ private:
 			// node may be key's floor
 			// node->key may be greater and less than key, so need try node->right
 			TreeNode* tempNode = floor(node->right , key);
-			if(tempNode != nullptr)
+			if(tempNode != nil)
 				return tempNode;
 			else
 				return node;
@@ -439,8 +631,8 @@ private:
     // Find key's cell in the bst that node is the root
     TreeNode* ceil(TreeNode* node, Key key)
 	{
-        if(node == nullptr)
-            return nullptr;
+        if(node == nil)
+            return nil;
 
         if(node->key == key)
             return node;
@@ -452,7 +644,7 @@ private:
 			// node may be key's ceil node, 
 			// node->key may be less and greater than key, so need try node->left
 			TreeNode* tempNode = ceil(node->left , key);
-			if(tempNode != nullptr)
+			if(tempNode != nil)
 				return tempNode;
 			else
 				return node;
@@ -462,7 +654,7 @@ private:
    // destroy the node as postOrder
    void destroy(TreeNode * node)
 	{
-        if(node == nullptr)
+        if(node == nil)
 			return;
 
 		destroy(node->left);
@@ -471,142 +663,8 @@ private:
 		--m_count;
     }
 
-	// http://www.geeksforgeeks.org/red-black-tree-set-2-insert/
-    void fixViolation(TreeNode * &root, TreeNode *&node)
-	{
-		TreeNode *parentNode = nullptr;
-		TreeNode *grandParentNode = nullptr;
- 
-		while ((node != root) && (node->color != BLACK) &&
-			   (node->parent->color == RED))
-		{
- 			parentNode = node->parent;
-			grandParentNode = node->parent->parent;
- 
-			/*  Case : A
-				Parent of node is left child of Grand-parent of node */
-			if (parentNode == grandParentNode->left)
-			{
-				TreeNode *uncleNode = grandParentNode->right;
- 
-				/* Case : 1
-				   The uncle of node is also red
-				   Only Recoloring required */
-				if (uncleNode != nullptr && uncleNode->color == RED)
-				{
-					grandParentNode->color = RED;
-					parentNode->color = BLACK;
-					uncleNode->color = BLACK;
-					node = grandParentNode;
-				}
-				else
-				{
-					/* Case : 2
-					   node is right child of its parent
-					   Left-rotation required */
-					if (node == parentNode->right)
-					{
-						rotateLeft(root, parentNode);
-						node = parentNode;
-						parentNode = node->parent;
-					}
- 
-					/* Case : 3
-					   node is left child of its parent
-					   Right-rotation required */
-					rotateRight(root, grandParentNode);
-					swap(parentNode->color, grandParentNode->color);
-					node = parentNode;
-				}
-			}
- 
-			/* Case : B
-			   Parent of node is right child of Grand-parent of node */
-			else
-			{
-				TreeNode *uncleNode = grandParentNode->left;
- 
-				/*  Case : 1
-					The uncle of node is also red
-					Only Recoloring required */
-				if ((uncleNode != nullptr) && (uncleNode->color == RED))
-				{
-					grandParentNode->color = RED;
-					parentNode->color = BLACK;
-					uncleNode->color = BLACK;
-					node = grandParentNode;
-				}
-				else
-				{
-					/* Case : 2
-					   node is left child of its parent
-					   Right-rotation required */
-					if (node == parentNode->left)
-					{
-						rotateRight(root, parentNode);
-						node = parentNode;
-						parentNode = node->parent;
-					}
- 
-					/* Case : 3
-					   node is right child of its parent
-					   Left-rotation required */
-					rotateLeft(root, grandParentNode);
-					swap(parentNode->color, grandParentNode->color);
-					node = parentNode;
-				}
-			}
-		}
- 
-		root->color = BLACK;
-	}
-
-	void rotateLeft(TreeNode * &root, TreeNode *&node)
-	{
-		TreeNode *rightNode = node->right;
- 
-		node->right = rightNode->left;
- 
-		if (node->right != nullptr)
-			node->right->parent = node;
- 
-		rightNode->parent = node->parent;
- 
-		if (node->parent == nullptr)
-			root = rightNode;
-		else if (node == node->parent->left)
-			node->parent->left = rightNode;
-		else
-			node->parent->right = rightNode;
- 
-		rightNode->left = node;
-		node->parent = rightNode;
-	}
- 
-	void rotateRight(TreeNode * &root, TreeNode *&node)
-	{
-		TreeNode *leftNode = node->left;
- 
-		node->left = leftNode->right;
- 
-		if (node->left != nullptr)
-			node->left->parent = node;
- 
-		leftNode->parent = node->parent;
- 
-		if (node->parent == nullptr)
-			root = leftNode;
- 
-		else if (node == node->parent->left)
-			node->parent->left = leftNode;
-		else
-			node->parent->right = leftNode;
- 
-		leftNode->right = node;
-		node->parent = leftNode;
-	}
-
     TreeNode *m_root;
+	TreeNode *nil;
     int m_count;
 };
 
