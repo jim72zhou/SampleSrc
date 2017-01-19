@@ -17,6 +17,7 @@
 
 #include "Tree\BST.h"
 #include "Tree\RBT.h"
+#include "Tree\AVL.h"
 #include "Tree\SequenceST.h"
 
 #include "Book.h"
@@ -40,8 +41,7 @@ void sortTest(bool bTest)
 		int *pData;
 		int length;
 	} TestData;
-	
-	//auto pfQuickSort = [](int *pData, int n){quickSort(pData, 0, n);};
+
 	TestData sortArray[] = {
 		//{"Selection Sort",	selectionSort,		nullptr, NUM},
 		//{"Bubble Sort",		bubbleSort,			nullptr, NUM},
@@ -101,7 +101,8 @@ void sortTest(bool bTest)
 		delete[] pData[i];
 	}
 
-	/* verification for other cases
+	/* verification for template cases(float and user defined class */
+	cout << endl << "Float case:" << endl;
 	float data[6] = {2.6f, 1, 5.2f, 3, 2, 4};
 	selectionSort(data, 6);
 	for(int i = 0; i < 6; ++i)
@@ -109,30 +110,38 @@ void sortTest(bool bTest)
 		cout << data[i] << ", ";
 	}
 
-	cout<<endl;
-
+	cout << endl << endl << "User defined class:" << endl;
 	Book d[4] = { {"D",90} , {"C",100} , {"B",95} , {"A",95} };
     selectionSort(d, 4);
-    for( int i = 0 ; i < 4 ; i ++ )
-        cout<<d[i];
-    cout<<endl;
-	*/
+    for(int i = 0 ; i < 4 ; i ++)
+        cout << d[i];
+    cout << endl;
+
 }
 
-void bstTest(bool bTest)
+void bstPerformanceTest(bool bTest)
 {
     if(!bTest)
 		return;
 
 	string filename = "D:\\Temp\\Algorithm.txt";
+	string keyword = "algorithm";
     vector<string> words;
     if(FileProcs::readFile(filename, words))
 	{
         cout << "There are totally " << words.size() << " words in " << filename << endl;
         cout << endl;
 
-		// Almost random test
+		for(int t = 1; t <= 2; ++t)
 		{
+			if( t== 1)
+				cout << "Almost random case:" << endl;
+			else
+			{
+				cout << endl << "Sorted data case:" << endl;
+				sort(words.begin() , words.end());
+			}
+
 			// test BST
 			time_t startTime = clock();
 			BST<string, int> bst = BST<string, int>();
@@ -145,9 +154,9 @@ void bstTest(bool bTest)
 					(*res)++;
 			}
 
-			cout << "'Algorithm' : " << *bst.search("algorithm") << endl;
+			cout << keyword << " count : " << *bst.search(keyword) << endl;
 			time_t endTime = clock();
-			cout << "BST(Almost random) time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
+			cout << "BST time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
 
 			cout << endl;
 
@@ -163,10 +172,10 @@ void bstTest(bool bTest)
 					(*res)++;
 			}
 
-			cout << "'Algorithm' : " << *sst.search("algorithm") << endl;
+			cout << keyword << " count : " << *sst.search(keyword) << endl;
 
 			endTime = clock();
-			cout << "SequenceST(Almost random) time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
+			cout << "SequenceST time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
 
 			cout << endl;
 
@@ -183,70 +192,28 @@ void bstTest(bool bTest)
 					(*res)++;
 			}
 
-			cout << "'Algorithm' : " << *rbt.search("algorithm") << endl;
+			cout << keyword << " count : " << *rbt.search(keyword) << endl;
 			endTime = clock();
-			cout << "RBT(Almost random) time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
-
-			cout << endl;
-		}
-
-
-		// sorted data test
-        sort(words.begin() , words.end());
-		{
-			// test BST
-			time_t startTime = clock();
-			BST<string, int> bst = BST<string, int>();
-			for (vector<string>::iterator iter = words.begin(); iter != words.end(); iter++)
-			{
-				int *res = bst.search(*iter);
-				if (res == nullptr)
-					bst.insert(*iter, 1);
-				else
-					(*res)++;
-			}
-
-			cout << "'Algorithm' : " << *bst.search("algorithm") << endl;
-			time_t endTime = clock();
-			cout << "BST(sorted) time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
+			cout << "RBT time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
 
 			cout << endl;
 
-			// test SequenceST
+			// test AVL
 			startTime = clock();
-			SequenceST<string, int> sst = SequenceST<string, int>();
-			for(vector<string>::iterator iter = words.begin(); iter != words.end(); iter++) 
-			{
-				int *res = sst.search(*iter);
-				if (res == nullptr)
-					sst.insert(*iter, 1);
-				else
-					(*res)++;
-			}
-
-			cout << "'Algorithm' : " << *sst.search("algorithm") << endl;
-
-			endTime = clock();
-			cout << "SequenceST(sorted) time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
-
-			cout << endl;
-
-			// test RBT
-			startTime = clock();
-			RBT<string, int> rbt = RBT<string, int>();
+			AVL<string, int> avl = AVL<string, int>();
 
 			for (vector<string>::iterator iter = words.begin(); iter != words.end(); iter++) 
 			{
-				int *res = rbt.search(*iter);
+				int *res = avl.search(*iter);
 				if (res == nullptr)
-					rbt.insert(*iter, 1);
+					avl.insert(*iter, 1);
 				else
 					(*res)++;
 			}
 
-			cout << "'Algorithm' : " << *rbt.search("algorithm") << endl;
+			cout << keyword << " count : " << *avl.search(keyword) << endl;
 			endTime = clock();
-			cout << "RBT(sorted) time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
+			cout << "AVL time: " << double(endTime - startTime) / CLOCKS_PER_SEC << " s." << endl;
 
 			cout << endl;
 		}
@@ -516,6 +483,84 @@ void rbtRemoveTest(bool bTest)
 	}
 }
 
+void avlTest(bool bTest)
+{
+	if(!bTest)
+		return;
+
+	srand(unsigned(time(NULL)));
+	const int N  = 100;
+
+    AVL<int, int> avl;
+ 
+    for(int i = 0; i < N; ++i)
+	{
+		//avl.insert(i, i * 3 - 7);
+	}
+
+	for(int i = 0 ; i < N; ++i)
+	{
+        int key = rand()%N;
+		avl.insert(key, key * 7);
+		//cout << "(" << key << ")" << avl.size() << " ";
+	}
+ 
+    cout << endl;
+	cout << "Inoder Traversal of Created Tree\n";
+    avl.inOrder();
+ 
+    cout << "\n\nLevel Order Traversal of Created Tree\n";
+    avl.levelOrder();
+}
+
+void avlRemoveTest(bool bTest)
+{
+	if(!bTest)
+		return;
+
+    srand(unsigned(time(NULL)));
+	const int N  = 100;
+	AVL<int, int> avl;
+ 
+    for(int i = 0; i < N; ++i)
+	{
+		avl.insert(i, i );
+	}
+ 
+    cout << "Inoder Traversal of Created Tree\n";
+    avl.inOrder();
+ 
+    cout << "\n\nLevel Order Traversal of Created Tree\n";
+    avl.levelOrder();
+
+	cout << "\nRemoving data" << endl;
+	
+    for(int i = 0 ; i < N ; ++i)
+	{
+        int key = rand()%N;
+		//cout << "..." << key;
+		avl.remove(key);
+		//cout << " -> " << avl.size() << " ";
+		//avl.levelOrder();
+		cout << endl;
+	}
+
+	cout << endl;
+	cout << "Remaining data:" << endl;
+	avl.levelOrder();
+	cout << endl;
+
+	int remaining = avl.size();
+	for(int i = 0; i < remaining; ++i)
+	{
+		avl.removeMax();
+		cout << avl.size() << " ";
+		cout << endl;
+		//avl.levelOrder();
+		//cout << endl;
+	}
+}
+
 void prototypeTest(bool bTest)
 {
 	if(!bTest)
@@ -541,14 +586,17 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	prototypeTest(false);
 	
+	avlTest(false);
+	avlRemoveTest(true);
+
 	rbtTest(false);
-	rbtRemoveTest(true);
+	rbtRemoveTest(false);
 	
 	bstCeilFloorTest(false);
 	bstRemoveTest(false);
 	bstRemoveMinMaxTest(false);
 	bstTraverseTest(false);
-	bstTest(false);
+	bstPerformanceTest(false);
 	
 	sortTest(false);
 

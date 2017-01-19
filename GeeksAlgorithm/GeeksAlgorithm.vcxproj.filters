@@ -66,6 +66,12 @@
     <ClInclude Include="Tree\SequenceST.h">
       <Filter>Header File\Tree</Filter>
     </ClInclude>
+    <ClInclude Include="Tree\RBT.h">
+      <Filter>Header File\Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree\AVL.h">
+      <Filter>Header File\Tree</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
