@@ -169,9 +169,9 @@ public:
     }
 
 private:
-	TreeNode* insert(TreeNode *node, Key key, Value value)
+	TreeNode* insert(TreeNode *root, Key key, Value value)
 	{
-		if(node == nullptr)
+		if(root == nullptr)
 		{
 			++m_count;
 			return new TreeNode(key, value);
@@ -180,62 +180,62 @@ private:
 		// This BST is that the key in each node must be 
 		// greater than all keys stored in the left sub-tree, 
 		// and not greater than any key in the right sub-tree
-		if(node->key == key)
+		if(root->key == key)
 		{
-			node->value = value;
-			delete node;	// new node isn't added to the tree
+			root->value = value;
+			delete root;	// new root isn't added to the tree
 		}
-		else if(key < node->key)
+		else if(key < root->key)
 		{
-			node->left = insert(node->left, key, value);
+			root->left = insert(root->left, key, value);
 		}
-		else   // key > node->key
+		else   // key > root->key
 		{
-			node->right = insert(node->right, key, value);
+			root->right = insert(root->right, key, value);
 		}
 
-		return node;
+		return root;
 	}
 
-	bool contain(TreeNode* node, Key key)
+	bool contain(TreeNode* root, Key key)
 	{
-        if(node == nullptr)
+        if(root == nullptr)
 		{
 			return false;
 		}
 
-		if(node->key == key)
+		if(root->key == key)
 		{
 			return true;
 		}
-		else if(key < node->key)
+		else if(key < root->key)
 		{
-			return contain(node->left, key);
+			return contain(root->left, key);
 		}
-		else   // key > node->key
+		else   // key > root->key
 		{
-			return contain(node->right, key);
+			return contain(root->right, key);
 		}
     }
 
-    Value* search(TreeNode* node, Key key)
+    Value* search(TreeNode* root, Key key)
 	{
-        if(node == nullptr)
+        if(root == nullptr)
 		{
 			return nullptr;
 		}
 
-		if(node->key == key)
+		if(root->key == key)
 		{
-			return &(node->value);
+			return &(root->value);
 		}
-		else if(key < node->key)
+		else if(key < root->key)
 		{
-			return search(node->left, key);
+			return search(root->left, key);
 		}
-		else   // key > node->key
+		else   // key > root->key
 		{
-			return search(node->right, key);
+			return search(root->right, key);
 		}
     }
 
@@ -245,206 +245,206 @@ private:
 		cout<< "(" << node->key << "," << node->value << ") ";
 	}
 
-	void preOrder(TreeNode * node)
+	void preOrder(TreeNode * root)
 	{
-        if(node == nullptr)
+        if(root == nullptr)
 			return;
 		
-		nodeAction(node);
-		preOrder(node->left);
-		preOrder(node->right);
+		nodeAction(root);
+		preOrder(root->left);
+		preOrder(root->right);
     }
 
-    void inOrder(TreeNode * node)
+    void inOrder(TreeNode * root)
 	{
-        if(node == nullptr)
+        if(root == nullptr)
 			return;
 
-		inOrder(node->left);
-		nodeAction(node);
-		inOrder(node->right);
+		inOrder(root->left);
+		nodeAction(root);
+		inOrder(root->right);
     }
 
-   void postOrder(TreeNode * node)
+   void postOrder(TreeNode * root)
 	{
-        if(node == nullptr)
+        if(root == nullptr)
 			return;
 
-		postOrder(node->left);
-		postOrder(node->right);
-		nodeAction(node);
+		postOrder(root->left);
+		postOrder(root->right);
+		nodeAction(root);
     }
 
     // implemented as iteratively 
-    TreeNode* minimum(TreeNode* node)
+    TreeNode* minimum(TreeNode* root)
 	{
-		while(node->left)
-			node = node->left;
+		while(root->left)
+			root = root->left;
 
-		return node;
+		return root;
     }
 
 	// implemented as recursively
-    TreeNode* maximum(TreeNode* node)
+    TreeNode* maximum(TreeNode* root)
 	{
-        if(node->right == nullptr)
-			return node;
+        if(root->right == nullptr)
+			return root;
 
-		return maximum(node->right);
+		return maximum(root->right);
     }
 
 	// implemented as recursively
 	// remove the min node from root node
     // return new root after deleted min node
-    TreeNode* removeMin(TreeNode* node)
+    TreeNode* removeMin(TreeNode* root)
 	{
-		if(node->left == nullptr)
+		if(root->left == nullptr)
 		{
-			TreeNode * rightNode = node->right;
-			delete node;
+			TreeNode * rightNode = root->right;
+			delete root;
 			--m_count;
 
 			return rightNode;
 		}
 
-		node->left = removeMin(node->left);
-		return node;
+		root->left = removeMin(root->left);
+		return root;
     }
 
 	// implemented as iteratively
-	// remove the max node from root node
-    // return new root after deleted max node
-    TreeNode* removeMax(TreeNode* node)
+	// remove the max root from root root
+    // return new root after deleted max root
+    TreeNode* removeMax(TreeNode* root)
 	{
-		TreeNode* rootNode = node;
+		TreeNode* rootNode = root;
 		TreeNode* parentNode = nullptr;
-		while(node->right)
+		while(root->right)
 		{
-			parentNode = node;
-			node = node->right;
+			parentNode = root;
+			root = root->right;
 		}
 
 		--m_count;
-		TreeNode* leftNode = node->left;
-		delete node;
+		TreeNode* leftNode = root->left;
+		delete root;
 
 		if(parentNode)
 		{
 			parentNode->right = leftNode;
 			return rootNode;
 		}
-		else    // input node is root node
+		else    // input root is root root
 		{
 			return leftNode;
 		}
     }
 
-	TreeNode* remove(TreeNode* node, Key key)
+	TreeNode* remove(TreeNode* root, Key key)
 	{
-		if(node == nullptr)
+		if(root == nullptr)
             return nullptr;
 
-        if(key < node->key)
+        if(key < root->key)
 		{
-            node->left = remove(node->left, key);
-            return node;
+            root->left = remove(root->left, key);
+            return root;
         }
-        else if(key > node->key)
+        else if(key > root->key)
 		{
-            node->right = remove(node->right, key);
-            return node;
+            root->right = remove(root->right, key);
+            return root;
         }
-        else   // key == node->key
+        else   // key == root->key
 		{
 			TreeNode *successor = nullptr;
-			if(node->left == nullptr)
+			if(root->left == nullptr)
 			{
-				successor = node->right;
+				successor = root->right;
 			}
-			else if(node->right == nullptr)
+			else if(root->right == nullptr)
 			{
-				successor = node->left;
+				successor = root->left;
 			}
-			else   // node->left != nullptr && node->right != nullptr
+			else   // root->left != nullptr && root->right != nullptr
 			 
 			// This page explains it very concisely and clearly
 			// http://quiz.geeksforgeeks.org/binary-search-tree-set-2-delete/
 
-			// Find inorder successor of the node, and copy contents of the 
-			// inorder successor to the node and delete the inorder successor. 
+			// Find inorder successor of the root, and copy contents of the 
+			// inorder successor to the root and delete the inorder successor. 
 			// In this particular case, inorder successor can be obtained by 
-			// finding the minimum value in right child of the node.
+			// finding the minimum value in right child of the root.
 
 			// Note that inorder predecessor can also be used.
 			{
-				successor = new TreeNode(minimum(node->right));
+				successor = new TreeNode(minimum(root->right));
 				++m_count;
 
-				successor->right = removeMin(node->right);
-				successor->left = node->left;
+				successor->right = removeMin(root->right);
+				successor->left = root->left;
 			}
 
-			delete node;
+			delete root;
             --m_count;
 
             return successor;
 		}
     }
 
-	// Find key's floor in the bst that node is the root
-    TreeNode* floor(TreeNode* node, Key key)
+	// Find key's floor in the bst that root is the root
+    TreeNode* floor(TreeNode* root, Key key)
 	{
-        if(node == nullptr)
+        if(root == nullptr)
             return nullptr;
 
-		if(node->key == key)
-            return node;
-		else if(node->key > key)
-            return floor(node->left , key);
-		else // node->key < key
+		if(root->key == key)
+            return root;
+		else if(root->key > key)
+            return floor(root->left , key);
+		else // root->key < key
 		{       
-			// node may be key's floor
-			// node->key may be greater and less than key, so need try node->right
-			TreeNode* tempNode = floor(node->right , key);
+			// root may be key's floor
+			// root->key may be greater and less than key, so need try root->right
+			TreeNode* tempNode = floor(root->right , key);
 			if(tempNode != nullptr)
 				return tempNode;
 			else
-				return node;
+				return root;
 		}
     }
 
-    // Find key's cell in the bst that node is the root
-    TreeNode* ceil(TreeNode* node, Key key)
+    // Find key's cell in the bst that root is the root
+    TreeNode* ceil(TreeNode* root, Key key)
 	{
-        if(node == nullptr)
+        if(root == nullptr)
             return nullptr;
 
-        if(node->key == key)
-            return node;
-        else if(node->key < key)
-            return ceil(node->right , key);
-		else    // node->key > key
+        if(root->key == key)
+            return root;
+        else if(root->key < key)
+            return ceil(root->right , key);
+		else    // root->key > key
         {			
-			// node may be key's ceil node, 
-			// node->key may be less and greater than key, so need try node->left
-			TreeNode* tempNode = ceil(node->left , key);
+			// root may be key's ceil root, 
+			// root->key may be less and greater than key, so need try root->left
+			TreeNode* tempNode = ceil(root->left , key);
 			if(tempNode != nullptr)
 				return tempNode;
 			else
-				return node;
+				return root;
 		}
         
     }
 
-   // destroy the node as postOrder
-   void destroy(TreeNode * node)
+   // destroy the root as postOrder
+   void destroy(TreeNode * root)
 	{
-        if(node == nullptr)
+        if(root == nullptr)
 			return;
 
-		destroy(node->left);
-		destroy(node->right);
-		delete node;
+		destroy(root->left);
+		destroy(root->right);
+		delete root;
 		--m_count;
     }
 
