@@ -22,6 +22,7 @@
 
 #include "Book.h"
 #include "SortTestUtil.h"
+#include "UnionFindTestUtil.h"
 #include "FileProcs.h"
 
 using namespace std;
@@ -561,6 +562,30 @@ void avlRemoveTest(bool bTest)
 	}
 }
 
+void unionFindTest(bool bTest)
+{
+	if(!bTest)
+		return;
+
+	int n = 1000000;
+
+    // Quick Find
+//    UnionFindTestUtil::testQuickFind(n);
+
+    // Quick Union
+//    UnionFindTestUtil::testQuickUnion(n);
+
+    // Quick Union + sz
+    UnionFindTestUtil::testQuickUnionSize(n);
+
+    // Quick Union + rank
+    UnionFindTestUtil::testQuickUnionRank(n);
+
+    // Quick Union + rank + path compression
+    UnionFindTestUtil::testUnionFind(n);
+
+}
+
 void prototypeTest(bool bTest)
 {
 	if(!bTest)
@@ -585,9 +610,11 @@ int _tmain(int argc, _TCHAR* argv[])
 {
 
 	prototypeTest(false);
+
+	unionFindTest(true);
 	
 	avlTest(false);
-	avlRemoveTest(true);
+	avlRemoveTest(false);
 
 	rbtTest(false);
 	rbtRemoveTest(false);

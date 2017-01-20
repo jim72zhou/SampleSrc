@@ -93,6 +93,12 @@
     <ClInclude Include="Tree\BST.h" />
     <ClInclude Include="Tree\RBT.h" />
     <ClInclude Include="Tree\SequenceST.h" />
+    <ClInclude Include="UnionFindTestUtil.h" />
+    <ClInclude Include="UnionFind\QuickFind.h" />
+    <ClInclude Include="UnionFind\QuickUnion.h" />
+    <ClInclude Include="UnionFind\QuickUnionSize.h" />
+    <ClInclude Include="UnionFind\QuickUnionRank.h" />
+    <ClInclude Include="UnionFind\UnionFind.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

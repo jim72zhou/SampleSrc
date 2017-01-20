@@ -22,6 +22,9 @@
     <Filter Include="Header File\Tree">
       <UniqueIdentifier>{a36c189c-d855-49aa-b081-6fec4c497b90}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header File\UnionFind">
+      <UniqueIdentifier>{37b61880-b223-4079-824f-43d0903df06a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -71,6 +74,24 @@
     </ClInclude>
     <ClInclude Include="Tree\AVL.h">
       <Filter>Header File\Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="UnionFindTestUtil.h">
+      <Filter>Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="UnionFind\QuickFind.h">
+      <Filter>Header File\UnionFind</Filter>
+    </ClInclude>
+    <ClInclude Include="UnionFind\QuickUnion.h">
+      <Filter>Header File\UnionFind</Filter>
+    </ClInclude>
+    <ClInclude Include="UnionFind\QuickUnionSize.h">
+      <Filter>Header File\UnionFind</Filter>
+    </ClInclude>
+    <ClInclude Include="UnionFind\QuickUnionRank.h">
+      <Filter>Header File\UnionFind</Filter>
+    </ClInclude>
+    <ClInclude Include="UnionFind\UnionFind.h">
+      <Filter>Header File\UnionFind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
