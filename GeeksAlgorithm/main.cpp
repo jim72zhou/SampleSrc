@@ -22,6 +22,7 @@
 
 #include "Graph\DenseGraph.h"
 #include "Graph\SparseGraph.h"
+#include "Graph\Components.h"
 
 #include "Book.h"
 #include "SortTestUtil.h"
@@ -631,6 +632,35 @@ void graphReadTest(bool bTest)
     }
 }
 
+void componentTest(bool bTest)
+{
+    if(!bTest)
+		return;
+
+	// dataG1.txt
+    string filename1 = "d:\\temp\\dataG1.txt";
+    SparseGraph g1 = SparseGraph(6, false);
+    FileProcs::readGraph<SparseGraph>(g1, filename1);
+    g1.show();
+	cout << endl;
+	Component<SparseGraph> component1(g1);
+    cout << "TestG1, Component Count: " << component1.count() << endl;
+
+    cout << endl;
+
+    // dataG2.txt
+    string filename2 = "d:\\temp\\dataG2.txt";
+    SparseGraph g2 = SparseGraph(13, false);
+    FileProcs::readGraph<SparseGraph>(g2, filename2);
+	g2.show();
+	cout << endl;
+    Component<SparseGraph> component2(g2);
+    cout << "TestG2, Component Count: " << component2.count() << endl;
+
+	cout << "Is V0 connected with V1? " << (component2.isConnected(0, 1) ? "Yes" : "No") << endl;
+	cout << "Is V0 connected with V7? " << (component2.isConnected(0, 7) ? "Yes" : "No") << endl;
+}
+
 void prototypeTest(bool bTest)
 {
 	if(!bTest)
@@ -656,7 +686,8 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	prototypeTest(false);
 
-	graphReadTest(true);
+	componentTest(true);
+	graphReadTest(false);
 
 	unionFindTest(false);
 	
