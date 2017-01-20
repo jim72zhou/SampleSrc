@@ -79,6 +79,8 @@
   <ItemGroup>
     <ClInclude Include="Book.h" />
     <ClInclude Include="FileProcs.h" />
+    <ClInclude Include="Graph\DenseGraph.h" />
+    <ClInclude Include="Graph\SparseGraph.h" />
     <ClInclude Include="Heap\HeapSort.h" />
     <ClInclude Include="Heap\IndexMaxHeap.h" />
     <ClInclude Include="Heap\MaxHeap.h" />

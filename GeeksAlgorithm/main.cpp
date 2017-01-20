@@ -20,6 +20,9 @@
 #include "Tree\AVL.h"
 #include "Tree\SequenceST.h"
 
+#include "Graph\DenseGraph.h"
+#include "Graph\SparseGraph.h"
+
 #include "Book.h"
 #include "SortTestUtil.h"
 #include "UnionFindTestUtil.h"
@@ -586,6 +589,48 @@ void unionFindTest(bool bTest)
 
 }
 
+void graphReadTest(bool bTest)
+{
+	if(!bTest)
+		return;
+
+    string filename = "d:\\temp\\dataG2.txt";
+
+	int N = 13;
+
+    SparseGraph g1(N, false);
+    FileProcs::readGraph<SparseGraph>(g1 , filename);
+	cout << "Sparse Graph:" << endl;
+    g1.show();
+
+	cout << endl << "Show by iterator:" << endl;
+    for(int v = 0 ; v < N ; ++v)
+	{
+        cout << v << ": ";
+        SparseGraph::adjIterator adj(g1 , v);
+        for(int w = adj.begin() ; !adj.end() ; w = adj.next())
+            cout << w << " ";
+        cout<<endl;
+    }
+
+    cout<<endl;
+
+    DenseGraph g2(N , false);
+    FileProcs::readGraph<DenseGraph>(g2 , filename );
+	cout << "Dense Graph:" << endl;
+    g2.show();
+
+	cout << endl << "Show by iterator:" << endl;
+    for(int v = 0 ; v < N ; ++v)
+	{
+        cout << v << ": ";
+        DenseGraph::adjIterator adj(g2 , v);
+        for(int w = adj.begin() ; !adj.end() ; w = adj.next())
+            cout << w << " ";
+        cout<<endl;
+    }
+}
+
 void prototypeTest(bool bTest)
 {
 	if(!bTest)
@@ -611,7 +656,9 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	prototypeTest(false);
 
-	unionFindTest(true);
+	graphReadTest(true);
+
+	unionFindTest(false);
 	
 	avlTest(false);
 	avlRemoveTest(false);

@@ -25,6 +25,9 @@
     <Filter Include="Header File\UnionFind">
       <UniqueIdentifier>{37b61880-b223-4079-824f-43d0903df06a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header File\Graph">
+      <UniqueIdentifier>{a25ec11c-6033-43b6-a2d7-02807749ac64}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -92,6 +95,12 @@
     </ClInclude>
     <ClInclude Include="UnionFind\UnionFind.h">
       <Filter>Header File\UnionFind</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph\DenseGraph.h">
+      <Filter>Header File\Graph</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph\SparseGraph.h">
+      <Filter>Header File\Graph</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
