@@ -24,6 +24,7 @@
 #include "Graph\SparseGraph.h"
 #include "Graph\Components.h"
 #include "Graph\Path.h"
+#include "Graph\ShortestPath.h"
 
 #include "Book.h"
 #include "SortTestUtil.h"
@@ -647,9 +648,13 @@ void componentPathTest(bool bTest)
 	Component<SparseGraph> component1(g1);
     cout << "TestG1, Component Count: " << component1.count() << endl;
 
-	Path<SparseGraph> dfs(g1,0);
+	Path<SparseGraph> dfs(g1, 0);
     cout << "DFS: ";
     dfs.showPath(4);
+
+	ShortestPath<SparseGraph> bfs(g1, 0);
+    cout << "BFS: ";
+    bfs.showPath(4);
 
     cout << endl;
 
@@ -662,13 +667,18 @@ void componentPathTest(bool bTest)
     Component<SparseGraph> component2(g2);
     cout << "TestG2, Component Count: " << component2.count() << endl;
 
-	cout << "Is V0 connected with V1? " << (component2.isConnected(0, 1) ? "Yes" : "No") << endl;
+	cout << "Is V0 connected with V6? " << (component2.isConnected(0, 6) ? "Yes" : "No") << endl;
 	cout << "Is V0 connected with V7? " << (component2.isConnected(0, 7) ? "Yes" : "No") << endl;
 
-	Path<SparseGraph> dfs2(g2,0);
+	Path<SparseGraph> dfs2(g2, 0);
     cout << "DFS: ";
-    dfs2.showPath(1);
+    dfs2.showPath(6);
 	dfs2.showPath(7);
+
+	ShortestPath<SparseGraph> bfs2(g2, 0);
+    cout << "BFS: ";
+    bfs2.showPath(6);
+	bfs2.showPath(7);
 
 }
 
