@@ -23,6 +23,7 @@
 #include "Graph\DenseGraph.h"
 #include "Graph\SparseGraph.h"
 #include "Graph\Components.h"
+#include "Graph\Path.h"
 
 #include "Book.h"
 #include "SortTestUtil.h"
@@ -632,7 +633,7 @@ void graphReadTest(bool bTest)
     }
 }
 
-void componentTest(bool bTest)
+void componentPathTest(bool bTest)
 {
     if(!bTest)
 		return;
@@ -645,6 +646,10 @@ void componentTest(bool bTest)
 	cout << endl;
 	Component<SparseGraph> component1(g1);
     cout << "TestG1, Component Count: " << component1.count() << endl;
+
+	Path<SparseGraph> dfs(g1,0);
+    cout << "DFS: ";
+    dfs.showPath(4);
 
     cout << endl;
 
@@ -659,6 +664,12 @@ void componentTest(bool bTest)
 
 	cout << "Is V0 connected with V1? " << (component2.isConnected(0, 1) ? "Yes" : "No") << endl;
 	cout << "Is V0 connected with V7? " << (component2.isConnected(0, 7) ? "Yes" : "No") << endl;
+
+	Path<SparseGraph> dfs2(g2,0);
+    cout << "DFS: ";
+    dfs2.showPath(1);
+	dfs2.showPath(7);
+
 }
 
 void prototypeTest(bool bTest)
@@ -686,7 +697,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	prototypeTest(false);
 
-	componentTest(true);
+	componentPathTest(true);
 	graphReadTest(false);
 
 	unionFindTest(false);
