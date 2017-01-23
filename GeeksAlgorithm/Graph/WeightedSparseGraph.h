@@ -2,36 +2,42 @@
 // https://en.wikipedia.org/wiki/Graph_theory
 // https://en.wikipedia.org/wiki/Adjacency_list
 
-#ifndef GEEKS_SPARSEGRAPH_H
-#define GEEKS_SPARSEGRAPH_H
+#ifndef GEEKS_WEIGHTED_SPARSEGRAPH_H
+#define GEEKS_WEIGHTED_SPARSEGRAPH_H
 
 #include <iostream>
 #include <vector>
 #include <cassert>
 
+#include "Edge.h"
+
 using namespace std;
 
 // Adjacency list
-class SparseGraph
+template<typename Weight>
+class WeightedSparseGraph
 {
 private:
     int m_vertices;			// number of vertices
 	int m_edges;			// number of edges
     bool m_directed;
-    vector<vector<int>> m_graph;
+    vector<vector<Edge<Weight> *>> m_graph;
 
 public:
-    SparseGraph(int m_vertices , bool directed)
+    WeightedSparseGraph(int m_vertices , bool directed)
 	{
         this->m_vertices = m_vertices;
         this->m_edges = 0;
         this->m_directed = directed;
         for(int i = 0 ; i < m_vertices ; i ++)
-            m_graph.push_back(vector<int>());
+            m_graph.push_back(vector<Edge<Weight> *>());
     }
 
-    ~SparseGraph()
+    ~WeightedSparseGraph()
 	{
+		 for(int i = 0 ; i < m_vertices; ++i)
+            for(unsigned j = 0 ; j < m_graph[i].size() ; ++j)
+                delete m_graph[i][j];
 
     }
 
@@ -45,14 +51,14 @@ public:
 		return m_edges;
 	}
 
-    void addEdge(int v, int w)
+    void addEdge(int v, int w, Weight weight)
 	{
         assert(v >= 0 && v < m_vertices);
         assert(w >= 0 && w < m_vertices);
 
-        m_graph[v].push_back(w);
+        m_graph[v].push_back(new Edge<Weight>(v, w, weight));
         if(v != w && !m_directed)
-            m_graph[w].push_back(v);
+            m_graph[w].push_back(new Edge<Weight>(w, v, weight));
 
         ++m_edges;
     }
@@ -63,7 +69,7 @@ public:
         assert(w >= 0 && w < m_vertices);
 
         for(unsigned i = 0 ; i < m_graph[v].size() ; ++i)
-            if(m_graph[v][i] == w)
+            if(m_graph[v][i]->other(v) == w)
                 return true;
         return false;
     }
@@ -74,7 +80,7 @@ public:
 		{
             cout << "V" << i << ":\t";
             for(unsigned j = 0 ; j < m_graph[i].size() ; ++j)
-                cout << m_graph[i][j] << "  ";
+				cout << "(To:" << m_graph[i][j]->w() << ", Wt:" << m_graph[i][j]->weight() << ") ";
             cout<<endl;
         }
     }
@@ -98,7 +104,7 @@ public:
             index = 0;
             if(G.m_graph[vertex].size())
                 return G.m_graph[vertex][index];
-            return -1;
+            return nullptr;
         }
 
         int next()
@@ -106,7 +112,7 @@ public:
             ++index;
             if(index < G.m_graph[vertex].size())
                 return G.m_graph[vertex][index];
-            return -1;
+            return nullptr;
         }
 
         bool end(){
@@ -115,4 +121,4 @@ public:
     };
 };
 
-#endif //GEEKS_SPARSEGRAPH_H
+#endif //GEEKS_WEIGHTED_SPARSEGRAPH_H

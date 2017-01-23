@@ -3,36 +3,43 @@
 // https://en.wikipedia.org/wiki/Adjacency_matrix
 
 
-#ifndef GEEKS_DENSEGRAPH_H
-#define GEEKS_DENSEGRAPH_H
+#ifndef GEEKS_WEIGHTED_DENSEGRAPH_H
+#define GEEKS_WEIGHTED_DENSEGRAPH_H
 
 #include <iostream>
 #include <vector>
 #include <cassert>
 
+#include "Edge.h"
+
 using namespace std;
 
 // Adjacency_matrix
-class DenseGraph
-{
+template <typename Weight>
+class WeightedDenseGraph{
+
 private:
 	int m_vertices;			// number of vertices
 	int m_edges;			// number of edges
     bool m_directed;
-    vector<vector<bool>> m_graph;
+    vector<vector<Edge<Weight> *>> m_graph;
 
 public:
-    DenseGraph(int n , bool directed)
+    WeightedDenseGraph(int n , bool directed)
 	{
         this->m_vertices = n;
         this->m_edges = 0;
         this->m_directed = directed;
         for(int i = 0 ; i < m_vertices ; i ++)
-            m_graph.push_back(vector<bool>(n, false));
+            m_graph.push_back(vector<Edge<Weight> *>(n, nullptr));
     }
 
-    ~DenseGraph()
+    ~WeightedDenseGraph()
 	{
+		for(int i = 0 ; i < m_vertices ; ++i)
+            for(int j = 0 ; j < m_vertices ; ++j)
+                if( m_graph[i][j] != nullptr )
+                    delete m_graph[i][j];
 
     }
 
@@ -46,17 +53,22 @@ public:
 		return m_edges;
 	}
 
-    void addEdge(int v , int w)
+    void addEdge(int v , int w, Weight weight)
 	{
         assert(v >= 0 && v < m_vertices);
         assert(w >= 0 && w < m_vertices);
 
         if(hasEdge(v , w))
-            return;
+		{
+			delete m_graph[v][w];
+			if(!m_directed)
+				delete m_graph[w][v];
+			--m_edges;
+		}
 
-        m_graph[v][w] = true;
+        m_graph[v][w] = new Edge<Weight>(v, w, weight);
         if(!m_directed)
-            m_graph[w][v] = true;
+            m_graph[w][v] = new Edge<Weight>(w, v, weight);;
 
         ++m_edges;
     }
@@ -65,7 +77,7 @@ public:
 	{
         assert(v >= 0 && v < m_vertices);
         assert(w >= 0 && w < m_vertices);
-        return m_graph[v][w];
+        return m_graph[v][w] != nullptr;
     }
 
     void show()
@@ -74,7 +86,10 @@ public:
 		{
             cout << "V" << i << ":\t";
 			for(int j = 0 ; j < m_vertices ; ++j)
-                cout << m_graph[i][j] << "  ";
+				if(m_graph[i][j])
+					cout << m_graph[i][j]->weight() << "\t";
+				else
+					cout << "SP\t";
             cout << endl;
         }
     }
@@ -93,17 +108,17 @@ public:
             this->index = -1;
         }
 
-        int begin()
+        Edge<Weight>* begin()
 		{
             index = -1;
             return next();
         }
 
-        int next()
+        Edge<Weight>* next()
 		{
             for(index += 1 ; index < G.V() ; ++index)
                 if(G.m_graph[vertex][index])
-                    return index;
+                    return G.m_graph[vertex][index];
             return -1;
         }
 
@@ -114,4 +129,4 @@ public:
     };
 };
 
-#endif //GEEKS_DENSEGRAPH_H
+#endif //GEEKS_WEIGHTED_DENSEGRAPH_H
