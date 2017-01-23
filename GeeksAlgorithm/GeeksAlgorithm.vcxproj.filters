@@ -111,6 +111,15 @@
     <ClInclude Include="Graph\ShortestPath.h">
       <Filter>Header File\Graph</Filter>
     </ClInclude>
+    <ClInclude Include="Graph\Edge.h">
+      <Filter>Header File\Graph</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph\WeightedDenseGraph.h">
+      <Filter>Header File\Graph</Filter>
+    </ClInclude>
+    <ClInclude Include="Graph\WeightedSparseGraph.h">
+      <Filter>Header File\Graph</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include <algorithm>
 #include <iostream>
+#include <iomanip>
 
 #include "Sort\BasicSort.h"
 #include "sort\MergeSort.h"
@@ -22,6 +23,8 @@
 
 #include "Graph\DenseGraph.h"
 #include "Graph\SparseGraph.h"
+#include "Graph\WeightedDenseGraph.h"
+#include "Graph\WeightedSparseGraph.h"
 #include "Graph\Components.h"
 #include "Graph\Path.h"
 #include "Graph\ShortestPath.h"
@@ -682,6 +685,28 @@ void componentPathTest(bool bTest)
 
 }
 
+void weightedGraphTest(bool bTest)
+{
+    if(!bTest)
+		return;
+
+    string filename = "d:\\temp\\dataWeightG1.txt";
+    int V = 8;
+    cout << fixed << setprecision(2);
+
+    // Test Weighted Dense Graph
+    WeightedDenseGraph<double> g1 = WeightedDenseGraph<double>(V, false);
+    FileProcs::readGraphEx<WeightedDenseGraph<double>, double>(g1, filename);
+    g1.show();
+    cout<<endl;
+
+    // Test Weighted Sparse Graph
+    WeightedSparseGraph<double> g2 = WeightedSparseGraph<double>(V, false);
+    FileProcs::readGraphEx<WeightedSparseGraph<double>, double>(g2, filename);
+    g2.show();
+    cout<<endl;
+}
+
 void prototypeTest(bool bTest)
 {
 	if(!bTest)
@@ -707,7 +732,8 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	prototypeTest(false);
 
-	componentPathTest(true);
+	weightedGraphTest(true);
+	componentPathTest(false);
 	graphReadTest(false);
 
 	unionFindTest(false);
