@@ -82,6 +82,7 @@
     <ClInclude Include="Graph\Components.h" />
     <ClInclude Include="Graph\DenseGraph.h" />
     <ClInclude Include="Graph\Edge.h" />
+    <ClInclude Include="Graph\LazyPrimMST.h" />
     <ClInclude Include="Graph\Path.h" />
     <ClInclude Include="Graph\ShortestPath.h" />
     <ClInclude Include="Graph\SparseGraph.h" />

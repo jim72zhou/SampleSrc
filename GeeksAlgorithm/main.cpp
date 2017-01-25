@@ -28,6 +28,7 @@
 #include "Graph\Components.h"
 #include "Graph\Path.h"
 #include "Graph\ShortestPath.h"
+#include "Graph\LazyPrimMST.h"
 
 #include "Book.h"
 #include "SortTestUtil.h"
@@ -700,11 +701,27 @@ void weightedGraphTest(bool bTest)
     g1.show();
     cout<<endl;
 
+	 // Test Lazy Prim MST
+    cout << "Test Lazy Prim MST-Dense" << endl;
+    LazyPrimMST<WeightedDenseGraph<double>, double> lazyPrimMST1(g1);
+    vector<Edge<double>> mst1 = lazyPrimMST1.mstEdges();
+    for(unsigned i = 0 ; i < mst1.size() ; ++i)
+        cout << mst1[i] << endl;
+    cout<<"The MST weight is: " << lazyPrimMST1.result() << endl;
+
     // Test Weighted Sparse Graph
     WeightedSparseGraph<double> g2 = WeightedSparseGraph<double>(V, false);
     FileProcs::readGraphEx<WeightedSparseGraph<double>, double>(g2, filename);
     g2.show();
     cout<<endl;
+
+	cout << "Test Lazy Prim MST-Sparse:" << endl;
+    LazyPrimMST<WeightedSparseGraph<double>, double> lazyPrimMST2(g2);
+    vector<Edge<double>> mst2 = lazyPrimMST2.mstEdges();
+    for(unsigned i = 0 ; i < mst2.size() ; ++i)
+        cout << mst2[i] << endl;
+    cout<<"The MST weight is: " << lazyPrimMST2.result() << endl;
+
 }
 
 void prototypeTest(bool bTest)
