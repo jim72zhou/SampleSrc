@@ -89,17 +89,17 @@ public:
     class adjIterator
 	{
     private:
-        SparseGraph &G;
+        WeightedSparseGraph &G;
         int vertex;
         unsigned index;
     public:
-        adjIterator(SparseGraph &graph, int vertex): G(graph)
+        adjIterator(WeightedSparseGraph &graph, int vertex): G(graph)
 		{
             this->vertex = vertex;
             this->index = 0;
         }
 
-        int begin()
+        Edge<Weight>* begin()
 		{
             index = 0;
             if(G.m_graph[vertex].size())
@@ -107,7 +107,7 @@ public:
             return nullptr;
         }
 
-        int next()
+        Edge<Weight>* next()
 		{
             ++index;
             if(index < G.m_graph[vertex].size())

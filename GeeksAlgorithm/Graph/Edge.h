@@ -36,7 +36,7 @@ public:
     int other(int x)
 	{
         assert(x == m_x || x == m_y);
-        return x == x ? y : x;
+        return x == m_x ? m_y : m_x;
     }
 
     friend ostream& operator<<(ostream &os, const Edge &e)

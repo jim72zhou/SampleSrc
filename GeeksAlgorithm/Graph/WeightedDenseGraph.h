@@ -98,11 +98,11 @@ public:
     class adjIterator
 	{
     private:
-        DenseGraph &G;
+        WeightedDenseGraph &G;
         int vertex;
         int index;
     public:
-        adjIterator(DenseGraph &graph, int vertex): G(graph)
+        adjIterator(WeightedDenseGraph &graph, int vertex): G(graph)
 		{
             this->vertex = vertex;
             this->index = -1;
@@ -119,7 +119,7 @@ public:
             for(index += 1 ; index < G.V() ; ++index)
                 if(G.m_graph[vertex][index])
                     return G.m_graph[vertex][index];
-            return -1;
+            return nullptr;
         }
 
         bool end()
