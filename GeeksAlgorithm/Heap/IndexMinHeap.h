@@ -1,5 +1,5 @@
-﻿#ifndef GEEKS_INDEX_MAX_HEAP_H
-#define GEEKS_INDEX_MAX_HEAP_H
+﻿#ifndef GEEKS_INDEX_MIN_HEAP_H
+#define GEEKS_INDEX_MIN_HEAP_H
 
 #include <algorithm>
 #include <cassert>
@@ -28,10 +28,10 @@ using namespace std;
 //
 
 template<typename Item>
-class IndexMaxHeap
+class IndexMinHeap
 {
 public:
-	IndexMaxHeap(int capacity)
+	IndexMinHeap(int capacity)
 	{
 		m_pData = new Item[capacity + 1];
 		m_pIndex = new int[capacity + 1];
@@ -46,7 +46,7 @@ public:
 		}
 	}
 
-	IndexMaxHeap(Item arr[], int n)
+	IndexMinHeap(Item arr[], int n)
 	{
         m_pData = new Item[n + 1];
 		m_pIndex = new int[n + 1];
@@ -67,7 +67,7 @@ public:
             shiftDown(i);
     }
 
-	~IndexMaxHeap()
+	~IndexMinHeap()
 	{
 		delete [] m_pIndex;
 		delete [] m_pReverse;
@@ -140,7 +140,7 @@ public:
         shiftDown( j );
     }
 
-	Item popMax()
+	Item popMin()
 	{
         assert(m_count > 0);
         Item ret = m_pData[m_pIndex[1]];
@@ -154,7 +154,7 @@ public:
         return ret;
     }
 
-	int popMaxIndex()
+	int popMinIndex()
 	{
         assert(m_count > 0);
         Item ret = m_pIndex[1] -1;
@@ -168,7 +168,7 @@ public:
         return ret;
     }
 
-    Item getMax()
+    Item getMin()
 	{
         assert(m_count > 0);
         return m_pData[m_pIndex[1]];
@@ -183,7 +183,7 @@ private:
 
 	void shiftUp(int k)
 	{
-		while(k > 1 && m_pData[m_pIndex[k / 2]] < m_pData[m_pIndex[k]])
+		while(k > 1 && m_pData[m_pIndex[k / 2]] > m_pData[m_pIndex[k]])
 		{
 			swap(m_pIndex[k / 2], m_pIndex[k]);
 			m_pReverse[m_pIndex[k / 2]] = k / 2;
@@ -197,11 +197,11 @@ private:
 		while(2 * k <= m_count)
 		{
             int j = 2 * k;
-            if(j + 1 <= m_count && m_pData[m_pIndex[j + 1]] > m_pData[m_pIndex[j]])
+            if(j + 1 <= m_count && m_pData[m_pIndex[j + 1]] < m_pData[m_pIndex[j]])
                 ++j;
-            // now, data in m_pIndex[j] is the max in m_pIndex[2*k] and m_pIndex[2*k+1]
+            // now, data in m_pIndex[j] is the min in m_pIndex[2*k] and m_pIndex[2*k+1]
 
-            if(m_pData[m_pIndex[k]] >= m_pData[m_pIndex[j]])
+            if(m_pData[m_pIndex[k]] <= m_pData[m_pIndex[j]])
 				break;
             swap(m_pIndex[k], m_pIndex[j]);
 			m_pReverse[m_pIndex[k]] = k;
@@ -231,4 +231,4 @@ public:
 
 };
 
-#endif //GEEKS_INDEX_MAX_HEAP_H
+#endif //GEEKS_INDEX_MIN_HEAP_H
