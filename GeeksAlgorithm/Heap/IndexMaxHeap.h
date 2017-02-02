@@ -39,7 +39,7 @@ public:
 		this->m_capacity = capacity;
 		m_count = 0;
 
-		for(int i = 0 ; i < n ; ++i)
+		for(int i = 0 ; i < capacity ; ++i)
 		{
 			m_pIndex[i + 1] = 0;
 			m_pReverse[i + 1] = 0;
@@ -94,12 +94,15 @@ public:
 		return m_capacity;
 	}
 	
-	void insert(Item item)
+	void insert(int index, Item item)
 	{
 		assert(m_count + 1 <= m_capacity);
-		m_pData[++m_count] = item;
-		m_pIndex[m_count] = m_count;
-		m_pReverse[m_count] = m_count;
+		assert(index + 1 >= 1 && index + 1 <= m_capacity);
+		
+		++index;
+		m_pData[index] = item;
+		m_pIndex[++m_count] = index;
+		m_pReverse[index] = m_count;
 		shiftUp(m_count);
 	}
 
@@ -136,8 +139,8 @@ public:
 
 		// has reverse filed version
 		int j = m_pReverse[i];
-        shiftUp( j );
-        shiftDown( j );
+        shiftUp(j);
+        shiftDown(j);
     }
 
 	Item popMax()
@@ -157,7 +160,7 @@ public:
 	int popMaxIndex()
 	{
         assert(m_count > 0);
-        Item ret = m_pIndex[1] -1;
+        int ret = m_pIndex[1] - 1;
 
         m_pIndex[1] = m_pIndex[m_count];
 		m_pReverse[m_pIndex[m_count]] = 0;
