@@ -29,6 +29,7 @@
 #include "Graph\Path.h"
 #include "Graph\ShortestPath.h"
 #include "Graph\LazyPrimMST.h"
+#include "Graph\PrimMST.h"
 
 #include "Book.h"
 #include "SortTestUtil.h"
@@ -701,13 +702,22 @@ void weightedGraphTest(bool bTest)
     g1.show();
     cout<<endl;
 
-	 // Test Lazy Prim MST
+	// Test Lazy Prim MST
     cout << "Test Lazy Prim MST-Dense" << endl;
     LazyPrimMST<WeightedDenseGraph<double>, double> lazyPrimMST1(g1);
     vector<Edge<double>> mst1 = lazyPrimMST1.mstEdges();
     for(unsigned i = 0 ; i < mst1.size() ; ++i)
         cout << mst1[i] << endl;
     cout<<"The MST weight is: " << lazyPrimMST1.result() << endl;
+
+	// Test Prim MST
+    cout<<"Test Prim MST-Dense:"<<endl;
+    PrimMST<WeightedDenseGraph<double>, double> primMST1(g1);
+    vector<Edge<double>> mst10 = primMST1.mstEdges();
+    for(unsigned i = 0 ; i < mst10.size() ; ++i)
+        cout << mst10[i] << endl;
+    cout<<"The Prim MST weight is: " << primMST1.result() << endl;
+	cout<<endl;
 
     // Test Weighted Sparse Graph
     WeightedSparseGraph<double> g2 = WeightedSparseGraph<double>(V, false);
@@ -721,6 +731,15 @@ void weightedGraphTest(bool bTest)
     for(unsigned i = 0 ; i < mst2.size() ; ++i)
         cout << mst2[i] << endl;
     cout<<"The MST weight is: " << lazyPrimMST2.result() << endl;
+	cout<<endl;
+
+	// Test Prim MST
+    cout<<"Test Prim MST-Dense:"<<endl;
+    PrimMST<WeightedSparseGraph<double>, double> primMST2(g2);
+    vector<Edge<double>> mst20 = primMST1.mstEdges();
+    for(unsigned i = 0 ; i < mst20.size() ; ++i)
+        cout << mst20[i] << endl;
+    cout<<"The Prim MST weight is: " << primMST1.result() << endl;
 
 }
 

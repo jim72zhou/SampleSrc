@@ -84,12 +84,14 @@
     <ClInclude Include="Graph\Edge.h" />
     <ClInclude Include="Graph\LazyPrimMST.h" />
     <ClInclude Include="Graph\Path.h" />
+    <ClInclude Include="Graph\PrimMST.h" />
     <ClInclude Include="Graph\ShortestPath.h" />
     <ClInclude Include="Graph\SparseGraph.h" />
     <ClInclude Include="Graph\WeightedDenseGraph.h" />
     <ClInclude Include="Graph\WeightedSparseGraph.h" />
     <ClInclude Include="Heap\HeapSort.h" />
     <ClInclude Include="Heap\IndexMaxHeap.h" />
+    <ClInclude Include="Heap\IndexMinHeap.h" />
     <ClInclude Include="Heap\MaxHeap.h" />
     <ClInclude Include="Heap\MinHeap.h" />
     <ClInclude Include="Sort\BasicSort.h" />
