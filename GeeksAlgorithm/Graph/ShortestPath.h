@@ -17,18 +17,18 @@ class ShortestPath
 {
 private:
     Graph &G;
-    int m_start;	// start search vertex
+    int m_source;	// source search vertex
     bool* m_visited;
     int * m_from;
     int * m_order;
 
-	void bfs(int start)
+	void bfs(int source)
 	{        
 		queue<int> q;
 
-        q.push(start);
-        m_visited[start] = true;
-        m_order[start] = 0;
+        q.push(source);
+        m_visited[source] = true;
+        m_order[source] = 0;
 
 		while(!q.empty())
 		{
@@ -50,9 +50,9 @@ private:
     }
 
 public:
-    ShortestPath(Graph &graph, int start):G(graph)
+    ShortestPath(Graph &graph, int source):G(graph)
 	{
-        assert(start >= 0 && start < graph.V());
+        assert(source >= 0 && source < graph.V());
 
         m_visited = new bool[graph.V()];
         m_from = new int[graph.V()];
@@ -63,9 +63,9 @@ public:
             m_from[i] = -1;
             m_order[i] = -1;
         }
-        this->m_start = start;
+        this->m_source = source;
 
-		bfs(start);
+		bfs(source);
     }
 
     ~ShortestPath()
