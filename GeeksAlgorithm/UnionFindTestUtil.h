@@ -33,7 +33,7 @@ namespace UnionFindTestUtil
         }
         time_t endTime = clock();
 
-        cout<<"QuickFind, "<<2*n<<" ops, "<<double(endTime-startTime)/CLOCKS_PER_SEC<<" s"<<endl;
+        cout << "QuickFind, " << 2*n << " ops, " << double(endTime-startTime)/CLOCKS_PER_SEC << " s" << endl;
     }
 
     void testQuickUnion(int n)
@@ -56,7 +56,7 @@ namespace UnionFindTestUtil
 
         time_t endTime = clock();
 
-        cout<<"QuickUnion, "<<2*n<<" ops, "<<double(endTime-startTime)/CLOCKS_PER_SEC<<" s"<<endl;
+        cout << "QuickUnion, " << 2*n << " ops, " << double(endTime-startTime)/CLOCKS_PER_SEC << " s" << endl;
     }
 
     void testQuickUnionSize(int n)
@@ -79,7 +79,7 @@ namespace UnionFindTestUtil
 
         time_t endTime = clock();
 
-        cout<<"QuickUnionSize, "<<2*n<<" ops, "<<double(endTime-startTime)/CLOCKS_PER_SEC<<" s"<<endl;
+        cout << "QuickUnionSize, " << 2*n << " ops, " << double(endTime-startTime)/CLOCKS_PER_SEC << " s" << endl;
     }
 
     void testQuickUnionRank(int n)
@@ -101,7 +101,7 @@ namespace UnionFindTestUtil
         }
         time_t endTime = clock();
 
-        cout<<"QuickUnionRank, "<<2*n<<" ops, "<<double(endTime-startTime)/CLOCKS_PER_SEC<<" s"<<endl;
+        cout << "QuickUnionRank, " << 2*n << " ops, " << double(endTime-startTime)/CLOCKS_PER_SEC << " s" << endl;
     }
 
     void testUnionFind(int n)
@@ -123,7 +123,7 @@ namespace UnionFindTestUtil
         }
         time_t endTime = clock();
 
-        cout<<"UninFindPathCompress , "<<2*n<<" ops, "<<double(endTime-startTime)/CLOCKS_PER_SEC<<" s"<<endl;
+        cout << "UninFindPathCompress , " << 2*n << " ops, " << double(endTime-startTime)/CLOCKS_PER_SEC << " s" << endl;
     }
 }
 #endif //GEEKS_UNIONFINDTESTUTIL_H

@@ -129,6 +129,18 @@
     <ClInclude Include="Graph\PrimMST.h">
       <Filter>Header File\Graph</Filter>
     </ClInclude>
+    <ClInclude Include="testGraph.h">
+      <Filter>Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="testSort.h">
+      <Filter>Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="testTree.h">
+      <Filter>Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="testUnionFind.h">
+      <Filter>Header File</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

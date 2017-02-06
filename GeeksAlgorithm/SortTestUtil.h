@@ -8,7 +8,6 @@
 
 using namespace std;
 
-
 namespace SortTestUtil
 {
     // generate n random elements, every element is in [rangeLo, rangeHi]
