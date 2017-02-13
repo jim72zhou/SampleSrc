@@ -72,12 +72,12 @@ public:
     vector<Edge<Weight>> mstEdges()
 	{
         return m_mst;
-    };
+    }
 
     Weight result()
 	{
         return m_mstWeight;
-    };
+    }
 };
 
 #endif // GEEKS_LAZYPRIMMST_H
