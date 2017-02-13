@@ -20,6 +20,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	prototypeTest(false);
 
 	mstPerformanceTest(true);
+	mstPerformanceDenseTest(true);
 	weightedGraphTest(false);
 	componentPathTest(false);
 	graphReadTest(false);

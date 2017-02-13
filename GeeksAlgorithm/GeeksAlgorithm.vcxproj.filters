@@ -141,6 +141,9 @@
     <ClInclude Include="testUnionFind.h">
       <Filter>Header File</Filter>
     </ClInclude>
+    <ClInclude Include="Graph\KruskalMST.h">
+      <Filter>Header File\Graph</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

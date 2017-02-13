@@ -13,6 +13,7 @@
 #include "Graph\ShortestPath.h"
 #include "Graph\LazyPrimMST.h"
 #include "Graph\PrimMST.h"
+#include "Graph\KruskalMST.h"
 
 #include "FileProcs.h"
 
@@ -129,16 +130,25 @@ void weightedGraphTest(bool bTest)
     vector<Edge<double>> mst1 = lazyPrimMST1.mstEdges();
     for(unsigned i = 0 ; i < mst1.size() ; ++i)
         cout << mst1[i] << endl;
-    cout<<"The MST weight is: " << lazyPrimMST1.result() << endl;
+    cout << "The MST weight is: " << lazyPrimMST1.result() << endl;
 
 	// Test Prim MST
-    cout<<"Test Prim MST-Dense:"<<endl;
+    cout << "Test Prim MST-Dense:" << endl;
     PrimMST<WeightedDenseGraph<double>, double> primMST1(g1);
-    vector<Edge<double>> mst10 = primMST1.mstEdges();
-    for(unsigned i = 0 ; i < mst10.size() ; ++i)
-        cout << mst10[i] << endl;
-    cout<<"The Prim MST weight is: " << primMST1.result() << endl;
-	cout<<endl;
+    mst1 = primMST1.mstEdges();
+    for(unsigned i = 0 ; i < mst1.size() ; ++i)
+        cout << mst1[i] << endl;
+    cout << "The Prim MST weight is: " << primMST1.result() << endl;
+	cout << endl;
+
+	// Test Kruskal MST
+    cout << "Test Kruskal MST-Dense:" << endl;
+    KruskalMST<WeightedDenseGraph<double>, double> kruskalMST1(g1);
+    mst1 = kruskalMST1.mstEdges();
+    for(unsigned i = 0 ; i < mst1.size() ; ++i)
+        cout << mst1[i] << endl;
+    cout << "The MST weight is: " << kruskalMST1.result() << endl;
+	cout << endl;
 
     // Test Weighted Sparse Graph
     WeightedSparseGraph<double> g2 = WeightedSparseGraph<double>(V, false);
@@ -151,17 +161,26 @@ void weightedGraphTest(bool bTest)
     vector<Edge<double>> mst2 = lazyPrimMST2.mstEdges();
     for(unsigned i = 0 ; i < mst2.size() ; ++i)
         cout << mst2[i] << endl;
-    cout<<"The MST weight is: " << lazyPrimMST2.result() << endl;
-	cout<<endl;
+    cout << "The MST weight is: " << lazyPrimMST2.result() << endl;
+	cout << endl;
 
 	// Test Prim MST
-    cout<<"Test Prim MST-Dense:"<<endl;
+    cout << "Test Prim MST-Dense:" << endl;
     PrimMST<WeightedSparseGraph<double>, double> primMST2(g2);
-    vector<Edge<double>> mst20 = primMST1.mstEdges();
-    for(unsigned i = 0 ; i < mst20.size() ; ++i)
-        cout << mst20[i] << endl;
-    cout<<"The Prim MST weight is: " << primMST1.result() << endl;
+    mst2 = primMST1.mstEdges();
+    for(unsigned i = 0 ; i < mst2.size() ; ++i)
+        cout << mst2[i] << endl;
+    cout << "The Prim MST weight is: " << primMST2.result() << endl;
+	cout << endl;
 
+	// Test Kruskal MST
+    cout << "Test Kruskal MST-Dense:" << endl;
+    KruskalMST<WeightedSparseGraph<double>, double> kruskalMST2(g2);
+    mst2 = kruskalMST2.mstEdges();
+    for(unsigned i = 0 ; i < mst2.size() ; ++i)
+        cout << mst2[i] << endl;
+    cout << "The MST weight is: " << kruskalMST2.result() << endl;
+	cout << endl;
 }
 
 void mstPerformanceTest(bool bTest)
@@ -201,38 +220,152 @@ void mstPerformanceTest(bool bTest)
     startTime = clock();
     LazyPrimMST<WeightedSparseGraph<double>, double> lazyPrimMST1(g1);
     endTime = clock();
-    cout<<"Test for G1: "<< (double)(endTime-startTime)/CLOCKS_PER_SEC << " s." << endl;
+    cout<<"Test for G1: " << (double)(endTime-startTime)/CLOCKS_PER_SEC << " s." << endl;
 
     startTime = clock();
     LazyPrimMST<WeightedSparseGraph<double>, double> lazyPrimMST2(g2);
     endTime = clock();
-    cout<<"Test for G2: "<<(double)(endTime-startTime)/CLOCKS_PER_SEC<<" s."<<endl;
+    cout<<"Test for G2: " << (double)(endTime-startTime)/CLOCKS_PER_SEC << " s." << endl;
 
     startTime = clock();
     LazyPrimMST<WeightedSparseGraph<double>, double> lazyPrimMST3(g3);
     endTime = clock();
-    cout<<"Test for G3: "<<(double)(endTime-startTime)/CLOCKS_PER_SEC<<" s."<<endl;
+    cout<<"Test for G3: " << (double)(endTime-startTime)/CLOCKS_PER_SEC << " s." << endl;
 
-    cout<<endl;
+    cout << endl;
 
     // Test Prim MST
-    cout<<"Test Prim MST:"<<endl;
+    cout << "Test Prim MST:" << endl;
 
     startTime = clock();
     PrimMST<WeightedSparseGraph<double>, double> PrimMST1(g1);
     endTime = clock();
-    cout<<"Test for G1: "<<(double)(endTime-startTime)/CLOCKS_PER_SEC<<" s."<<endl;
+    cout << "Test for G1: " << (double)(endTime-startTime)/CLOCKS_PER_SEC << " s." << endl;
 
     startTime = clock();
     PrimMST<WeightedSparseGraph<double>, double> PrimMST2(g2);
     endTime = clock();
-    cout<<"Test for G2: "<<(double)(endTime-startTime)/CLOCKS_PER_SEC<<" s."<<endl;
+    cout << "Test for G2: " << (double)(endTime-startTime)/CLOCKS_PER_SEC << " s." << endl;
 
     startTime = clock();
     PrimMST<WeightedSparseGraph<double>, double> PrimMST3(g3);
     endTime = clock();
-    cout<<"Test for G3: "<<(double)(endTime-startTime)/CLOCKS_PER_SEC<<" s."<<endl;
+    cout << "Test for G3: " << (double)(endTime-startTime)/CLOCKS_PER_SEC << " s." << endl;
 
     cout<<endl;
 
+	// Test Kruskal MST
+    cout << "Test Kruskal MST:" << endl;
+
+    startTime = clock();
+    KruskalMST<WeightedSparseGraph<double>, double> KruskalMST1(g1);
+    endTime = clock();
+    cout << "Test for G1: " << (double)(endTime-startTime)/CLOCKS_PER_SEC << " s." << endl;
+
+    startTime = clock();
+    KruskalMST<WeightedSparseGraph<double>, double> KruskalMST2(g2);
+    endTime = clock();
+    cout << "Test for G2: " << (double)(endTime-startTime)/CLOCKS_PER_SEC << " s." << endl;
+
+    startTime = clock();
+    KruskalMST<WeightedSparseGraph<double>, double> KruskalMST3(g3);
+    endTime = clock();
+    cout << "Test for G3: " << (double)(endTime-startTime)/CLOCKS_PER_SEC << " s." << endl;
+
+    cout << endl;
+
 }
+
+void mstPerformanceDenseTest(bool bTest)
+{
+    if(!bTest)
+		return;
+
+    string filename1 = "..\\TestData\\dataWeightG250.txt";
+    int V1 = 250;
+
+    string filename2 = "..\\TestData\\dataWeightG1000.txt";
+    int V2 = 1000;
+
+    string filename3 = "..\\TestData\\dataWeightG10000.txt";
+    int V3 = 10000;
+
+
+    WeightedDenseGraph<double> g1 = WeightedDenseGraph<double>(V1, false);
+	FileProcs::readGraphEx<WeightedDenseGraph<double>, double>(g1, filename1);
+    cout << filename1 << " load successfully." << endl;
+
+	WeightedDenseGraph<double> g2 = WeightedDenseGraph<double>(V2, false);
+	FileProcs::readGraphEx<WeightedDenseGraph<double>, double>(g2, filename2);
+    cout << filename2 << " load successfully." << endl;
+
+	WeightedDenseGraph<double> g3 = WeightedDenseGraph<double>(V3, false);
+	FileProcs::readGraphEx<WeightedDenseGraph<double>, double>(g3, filename3);
+    cout << filename3 << " load successfully." << endl;
+   
+    cout << endl;
+
+    clock_t startTime, endTime;
+
+    // Test Lazy Prim MST
+    cout << "Test Lazy Prim MST:" << endl;
+
+    startTime = clock();
+    LazyPrimMST<WeightedDenseGraph<double>, double> lazyPrimMST1(g1);
+    endTime = clock();
+    cout << "Test for G1: " << (double)(endTime-startTime)/CLOCKS_PER_SEC << " s." << endl;
+
+    startTime = clock();
+    LazyPrimMST<WeightedDenseGraph<double>, double> lazyPrimMST2(g2);
+    endTime = clock();
+    cout << "Test for G2: " << (double)(endTime-startTime)/CLOCKS_PER_SEC<< " s." << endl;
+
+    startTime = clock();
+    LazyPrimMST<WeightedDenseGraph<double>, double> lazyPrimMST3(g3);
+    endTime = clock();
+    cout << "Test for G3: " << (double)(endTime-startTime)/CLOCKS_PER_SEC<< " s." << endl;
+
+    cout << endl;
+
+    // Test Prim MST
+    cout << "Test Prim MST:" << endl;
+
+    startTime = clock();
+    PrimMST<WeightedDenseGraph<double>, double> PrimMST1(g1);
+    endTime = clock();
+    cout << "Test for G1: " << (double)(endTime-startTime)/CLOCKS_PER_SEC<< " s." << endl;
+
+    startTime = clock();
+    PrimMST<WeightedDenseGraph<double>, double> PrimMST2(g2);
+    endTime = clock();
+    cout << "Test for G2: " << (double)(endTime-startTime)/CLOCKS_PER_SEC<< " s." << endl;
+
+    startTime = clock();
+    PrimMST<WeightedDenseGraph<double>, double> PrimMST3(g3);
+    endTime = clock();
+    cout << "Test for G3: " << (double)(endTime-startTime)/CLOCKS_PER_SEC << " s." << endl;
+
+    cout << endl;
+
+	// Test Kruskal MST
+    cout << "Test Kruskal MST:" << endl;
+
+    startTime = clock();
+    KruskalMST<WeightedDenseGraph<double>, double> KruskalMST1(g1);
+    endTime = clock();
+    cout << "Test for G1: " <<(double)(endTime-startTime)/CLOCKS_PER_SEC<< " s." << endl;
+
+    startTime = clock();
+    KruskalMST<WeightedDenseGraph<double>, double> KruskalMST2(g2);
+    endTime = clock();
+    cout << "Test for G2: " << (double)(endTime-startTime)/CLOCKS_PER_SEC<< " s." << endl;
+
+    startTime = clock();
+    KruskalMST<WeightedDenseGraph<double>, double> KruskalMST3(g3);
+    endTime = clock();
+    cout << "Test for G3: " << (double)(endTime-startTime)/CLOCKS_PER_SEC<< " s." << endl;
+	cout << endl;
+
+}
+
+
