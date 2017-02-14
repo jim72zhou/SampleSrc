@@ -19,8 +19,9 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	prototypeTest(false);
 
-	mstPerformanceTest(true);
-	mstPerformanceDenseTest(true);
+	shortestPathTest(true);
+	mstPerformanceTest(false);
+	mstPerformanceDenseTest(false);
 	weightedGraphTest(false);
 	componentPathTest(false);
 	graphReadTest(false);

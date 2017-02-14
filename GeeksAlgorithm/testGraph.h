@@ -14,6 +14,7 @@
 #include "Graph\LazyPrimMST.h"
 #include "Graph\PrimMST.h"
 #include "Graph\KruskalMST.h"
+#include "Graph\DijkstraSP.h"
 
 #include "FileProcs.h"
 
@@ -368,4 +369,24 @@ void mstPerformanceDenseTest(bool bTest)
 
 }
 
+void shortestPathTest(bool bTest)
+{
+    if(!bTest)
+		return;
 
+    string filename = "..\\TestData\\dataG1SP.txt";
+    int V = 5;
+
+    WeightedSparseGraph<int> g = WeightedSparseGraph<int>(V, true);
+	//WeightedSparseGraph<int> g = WeightedSparseGraph<int>(V, false);
+    FileProcs::readGraphEx<WeightedSparseGraph<int>, int>(g, filename);
+
+    cout << "Test Dijkstra:" << endl << endl;
+    DijkstraSP<WeightedSparseGraph<int>, int> dij(g, 0);
+    for(int i = 1 ; i < V ; ++i)
+	{
+        cout << "Shortest Path to " << i << " : " << dij.shortestPathTo(i) << endl;
+        dij.showPath(i);
+        cout << "----------" << endl;
+    }
+}

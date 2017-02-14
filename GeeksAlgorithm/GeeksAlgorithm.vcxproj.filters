@@ -144,6 +144,9 @@
     <ClInclude Include="Graph\KruskalMST.h">
       <Filter>Header File\Graph</Filter>
     </ClInclude>
+    <ClInclude Include="Graph\DijkstraSP.h">
+      <Filter>Header File\Graph</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
