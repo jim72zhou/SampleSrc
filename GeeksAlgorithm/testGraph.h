@@ -15,6 +15,7 @@
 #include "Graph\PrimMST.h"
 #include "Graph\KruskalMST.h"
 #include "Graph\DijkstraSP.h"
+#include "Graph\\BellmanFordSP.h"
 
 #include "FileProcs.h"
 
@@ -389,4 +390,36 @@ void shortestPathTest(bool bTest)
         dij.showPath(i);
         cout << "----------" << endl;
     }
+
+	cout << endl << "Test Bellman-Ford:" << endl << endl;
+    BellmanFordSP<WeightedSparseGraph<int>, int> bellmanFord(g, 0);
+    if(bellmanFord.isNegativeCycle())
+        cout << "The graph contain negative cycle!" << endl;
+    else
+        for(int i = 1 ; i < V ; ++i)
+		{
+            cout << "Shortest Path to " << i << " : " << bellmanFord.shortestPathTo(i) << endl;
+            bellmanFord.showPath(i);
+            cout << "----------" << endl;
+        }
+
+	cout << endl << "Test Bellman-Ford with negative cicle:" << endl << endl;
+	filename = "..\\TestData\\dataSP_negative_circle.txt";
+    V = 5;
+
+    WeightedSparseGraph<int> g2 = WeightedSparseGraph<int>(V, true);
+    FileProcs::readGraphEx<WeightedSparseGraph<int>, int>(g2, filename);
+
+    BellmanFordSP<WeightedSparseGraph<int>, int> bellmanFord2(g2, 0);
+    if(bellmanFord2.isNegativeCycle())
+        cout << "The graph contain negative cycle!" << endl;
+    else
+        for(int i = 1 ; i < V ; ++i)
+		{
+            cout << "Shortest Path to " << i << " : " << bellmanFord2.shortestPathTo(i) << endl;
+            bellmanFord2.showPath(i);
+            cout << "----------" << endl;
+        }
+
+
 }

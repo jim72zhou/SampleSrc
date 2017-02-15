@@ -79,6 +79,7 @@
   <ItemGroup>
     <ClInclude Include="Book.h" />
     <ClInclude Include="FileProcs.h" />
+    <ClInclude Include="Graph\BellmanFordSP.h" />
     <ClInclude Include="Graph\Components.h" />
     <ClInclude Include="Graph\DenseGraph.h" />
     <ClInclude Include="Graph\DijkstraSP.h" />
