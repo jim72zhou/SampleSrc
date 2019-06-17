@@ -1,0 +1,26 @@
+<!--admin.wxml-->
+<view class="container">
+  <view class="userinfo">
+    <view class="userinfo-avatar">
+      <open-data  type="userAvatarUrl"></open-data>
+    </view>
+  </view>
+  <view class="userinfo-nickname">
+    <open-data type="userNickName"></open-data>
+    <text>，欢迎来到小王子加油站！</text>
+    <view>
+      <input style='margin-top: 10rpx;' password='true' placeholder="请输入管理员密码" value="{{inPassword}}" bindinput="bindKeyInputPassword" />
+    </view>
+  </view>
+</view>
+
+<view wx:if="{{inPassword==password}}">
+  <view class='msg msg-info'>
+    <text>构建中...,请耐心等候！</text>
+  </view>
+</view>
+<view wx:else>
+  <view class='msg msg-warning'>
+    <text>你不是管理员！</text>
+  </view>
+</view>

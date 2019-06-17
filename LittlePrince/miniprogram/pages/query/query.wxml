@@ -1,0 +1,10 @@
+<!--pages/course/query/query.wxml-->
+<view>
+  <input style='margin-top: 40rpx;' placeholder="请输入查询课程" value="{{nameIn}}" bindinput="bindKeyInputNameIn" />
+  <button style='margin-top: 40rpx;' bindtap='queryData'>查询课程信息</button>
+  <text style='margin-top: 80rpx;'>
+     教室：{{roomResult}}
+  </text><text style='margin-top: 80rpx;'>
+     上课时间：{{scheduleResult}}
+  </text>
+</view>

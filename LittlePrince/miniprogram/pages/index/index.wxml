@@ -1,0 +1,65 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="userinfo">
+    <view class="userinfo-avatar">
+      <open-data  type="userAvatarUrl"></open-data>
+    </view>
+  </view>
+  <view class="userinfo-nickname">
+    <open-data type="userNickName"></open-data>
+    <text>，欢迎来到小王子加油站！</text>
+    <view>
+      <input style='margin-top: 10rpx;' placeholder="请输入孩子的姓名" value="{{student}}" bindinput="bindKeyInputStudent" />
+    </view>
+  </view>
+</view>
+
+<view class='btnbar'>
+  <button class='btn-bg' bindtap='queryCourseInfo'>点击显示课程信息</button>
+</view>
+
+<!--  课程表 -->
+<view class='table'>
+  <view class='tr bg-header'>
+    <block wx:for="{{schTitle}}" wx:key="{{code}}">
+      <view class="th">{{item}}</view>
+    </block>
+  </view>
+  
+  <view wx:if="{{hasCourse}}">
+    <block wx:for="{{courseList}}" wx:key="{{code}}">
+      <view class='tr bg-items' wx:if="{{index % 2 == 0}}">
+        <view class="td">{{item.subject}}</view>
+        <view class="td-border">{{item.place}}</view>
+        <view class="td">{{item.schedule}}</view>
+      </view>
+      <view class="tr" wx:else>
+        <view class="td">{{item.subject}}</view>
+        <view class="td-border">{{item.place}}</view>
+        <view class="td">{{item.schedule}}</view>
+      </view>
+    </block>
+  </view>
+  <view wx:else>
+    <text>还没有你的课程信息</text>
+  </view>
+</view>
+
+<view wx:if="{{hasCourse}}">
+  <view class="btnbar">
+    <button class='btn-bg' bindtap='queryNotifyInfo'>点击显示通知信息</button>
+  </view>
+  <view wx:if="{{cntNotify > 0}}">
+    <view class="notify">
+      <text>有{{notifyList.length}}条通知</text>
+    </view>
+    <block wx:for="{{notifyList}}" wx:key="{{code}}">
+      <view class="notify">
+        <text>{{index + 1}}: {{item.info}}</text>
+      </view>
+    </block>
+  </view>
+  <view wx:elif="{{cntNotify == 0}}">
+    <text> 没有变化通知</text>
+  </view>
+</view>
